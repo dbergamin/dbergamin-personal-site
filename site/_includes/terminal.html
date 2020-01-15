@@ -1,0 +1,35 @@
+<script src="assets/caret.js"></script>
+
+<div id="terminal-container" width=720px>
+  <div id="terminal-header">
+     
+  </div>
+  <div id="terminal-body">
+    <div id="terminal-line">
+      <span class="terminal-prompt">guest@danielbergamin.net:~ $ </span>
+      <span class="terminal-command">cd public</span>
+    </div>
+    <div id="terminal-line">
+      <span class="terminal-prompt">guest@danielbergamin.net:~/public $ </span>
+      <span class="terminal-command">ls</span>
+    </div>
+    <div id="terminal-line">
+      <span class="terminal-output">[ cv.html ] [ blog.html ] [ contact.html ]</span>
+    </div>
+    <div id="terminal-line">
+      <span class="terminal-prompt">guest@danielbergamin.net:~/public $ </span>
+      <input id="active-terminal-command" class="terminal-command" autofocus/>
+      <span id="terminal-cursor">█</span>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  var input = document.querySelector('#active-terminal-command'); // get the input element
+  input.addEventListener('input', resizeInput); // bind the "resizeInput" callback on "input" event
+  resizeInput.call(input); // immediately call the function
+
+  function resizeInput() {
+    this.style.width = this.value.length + "ch";
+  }
+</script>

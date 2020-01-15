@@ -1,0 +1,63 @@
+$terminal-background: #000000;
+
+#terminal-body {
+  padding-top: 2px;
+  background-color: $terminal-background;
+  background-image: $background-nodes-image;
+  height: 200px;
+}
+
+#terminal-container {
+  border: 1px solid #000000;
+  background-color: #eef;
+  margin-bottom: $spacing-unit;
+  margin-top: $spacing-unit;
+  font-family: "Ubuntu Mono", monospace;
+}
+
+#terminal-header {
+  background-color: $grey-color-dark;
+  background-image: $background-wavy-image;
+  border-bottom: 1px solid $grey-color-light;
+  height: 30px;
+}
+
+#terminal-line {
+  color: $grey-color-light;
+  line-height: 1.2;
+  width: 100%
+}
+
+.terminal-prompt {
+  padding-left: 2px;
+}
+
+input.terminal-command {
+  border: 0;
+  color: $grey-color-light;
+  background-color: transparent;
+  font-family: "Ubuntu Mono", monospace;
+  outline: none;
+  line-height: 1.2;
+  min-width: 1ch;
+}
+
+input.terminal-command:focus + #terminal-cursor {
+  animation: blink 1s step-start 0s infinite;
+  -webkit-animation: blink 1s step-start 0s infinite;
+}
+
+.terminal-output {
+  color: $brand-color;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0.0;
+  }
+}
+@-webkit-keyframes blink {
+  50% {
+    opacity: 0.0;
+  }
+}
