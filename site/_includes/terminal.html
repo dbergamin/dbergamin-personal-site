@@ -5,7 +5,7 @@
   <div id="terminal-body">
     <div id="terminal-line">
       <span class="terminal-prompt">guest@danielbergamin.net:~ $ </span>
-      <span class="terminal-command">cd public</span>
+      <span class="terminal-command">cd public/</span>
     </div>
     <div id="terminal-line">
       <span class="terminal-prompt">guest@danielbergamin.net:~/public $ </span>
@@ -43,4 +43,43 @@
   document.querySelector('#terminal-body').addEventListener("click",function() {
     document.querySelector('#active-terminal-command').focus();
   });
+
+  /* Logic to handle basic commands */
+  // Constants
+  const RETURN = 13;
+  
+  // List of commands
+  supportedCommands = {
+    'print(.*)?': commandPrint
+  }
+
+  // REPL logic
+  consoleInput.addEventListener('keyup', evaluate);
+  function evaluate(event) {
+    matchedCommand = false;
+
+    if (event.keyCode === RETURN) {
+      input = this.value.toLowerCase();
+      Object.keys(supportedCommands).forEach(function(command) {
+        if (input.match(command)) {
+          // If input matches a command definition, invoke the command with the raw input string
+          supportedCommands[command](input);
+          matchedCommand = true;
+        }
+      });
+
+      if (!matchedCommand) {
+        commandNotFound(input);
+      }
+    }
+  }
+
+  // Command implementations
+  function commandPrint(input) {
+    alert(input);
+  }
+
+  function commandNotFound(input) {
+    alert("command " + input + " not found");
+  }
 </script>
