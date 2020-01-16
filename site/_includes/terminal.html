@@ -1,5 +1,3 @@
-<script src="assets/caret.js"></script>
-
 <div id="terminal-container" width=720px>
   <div id="terminal-header">
      
@@ -14,22 +12,35 @@
       <span class="terminal-command">ls</span>
     </div>
     <div id="terminal-line">
-      <span class="terminal-output">[ cv.html ] [ blog.html ] [ contact.html ]</span>
+      <span class="terminal-output">
+        <span>[ cv.html ]</span>
+        <span>[ blog.html ]</span>
+        <span>[ contact.html ]</span>
+      </span>
     </div>
     <div id="terminal-line">
       <span class="terminal-prompt">guest@danielbergamin.net:~/public $ </span>
-      <input id="active-terminal-command" class="terminal-command" autofocus/>
-      <span id="terminal-cursor">█</span>
+      <input id="active-terminal-command" class="terminal-command" autofocus/><span id="terminal-cursor">█</span>
     </div>
   </div>
 </div>
 
+<!-- Make our vanity shell interface tick -->
 <script type="text/javascript">
-  var input = document.querySelector('#active-terminal-command'); // get the input element
-  input.addEventListener('input', resizeInput); // bind the "resizeInput" callback on "input" event
-  resizeInput.call(input); // immediately call the function
+  // Make the input resize dynamically so the fake blinking caret can stick at the end
+  var consoleInput = document.querySelector('#active-terminal-command');
+  consoleInput.addEventListener('input', resizeInput);
+  resizeInput.call(consoleInput);
 
   function resizeInput() {
     this.style.width = this.value.length + "ch";
+    if (this.getBoundingClientRect().width >= this.parentElement.getBoundingClientRect().width) {
+      alert("Please don't try to break my fragile imitation of a shell, no bug bounties to be found here.");
+    }
   }
+
+  // Make the entire line focus the input as it will start at zero length
+  document.querySelector('#terminal-body').addEventListener("click",function() {
+    document.querySelector('#active-terminal-command').focus();
+  });
 </script>

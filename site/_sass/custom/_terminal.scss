@@ -34,12 +34,17 @@ $terminal-background: #000000;
 
 input.terminal-command {
   border: 0;
-  color: $grey-color-light;
   background-color: transparent;
   font-family: "Ubuntu Mono", monospace;
   outline: none;
   line-height: 1.2;
-  min-width: 1ch;
+  max-width: 100%;
+  font-size: inherit;
+
+  // Dirty trick to hide the default blinking caret but keep text visible
+  // We are adding a fake 'terminal-style' caret in other devious ways
+  color: transparent;
+  text-shadow: 0 0 0 $grey-color-light;
 }
 
 input.terminal-command:focus + #terminal-cursor {
@@ -48,7 +53,7 @@ input.terminal-command:focus + #terminal-cursor {
 }
 
 .terminal-output {
-  color: $brand-color;
+  color: $highlight-color;
 }
 
 @keyframes blink {
