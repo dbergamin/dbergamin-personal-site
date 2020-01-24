@@ -1,11 +1,11 @@
 // Colours
-$terminal-background: #000000;
+$terminal-background: #000;
 
 // Sizes
 $terminal-header-height: 30px;
 
 #terminal-body {
-  border: 1px solid #000000;
+  border: 1px solid #000;
   padding-top: 2px;
   background-color: $terminal-background;
   background-image: $background-nodes-image;
@@ -31,7 +31,7 @@ $terminal-header-height: 30px;
 
 #terminal-title {
   line-height: $terminal-header-height;
-  text-shadow: 0px 0px 2px black;
+  text-shadow: 0 0 2px black;
   vertical-align: middle;
 }
 
@@ -70,11 +70,12 @@ input.terminal-command:focus + #terminal-cursor {
 
 @keyframes blink {
   50% {
-    opacity: 0.0;
+    opacity: 0;
   }
 }
+
 @-webkit-keyframes blink {
   50% {
-    opacity: 0.0;
+    opacity: 0;
   }
 }
