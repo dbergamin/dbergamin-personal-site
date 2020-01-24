@@ -3,13 +3,14 @@ $terminal-background: #000;
 
 // Sizes
 $terminal-header-height: 30px;
+$terminal-header-roundness-radius: 10px;
 
 #terminal-body {
-  border: 1px solid #000;
+  height: 200px;
   padding-top: 2px;
+  border: 1px solid #000;
   background-color: $terminal-background;
   background-image: $background-nodes-image;
-  height: 200px;
 }
 
 #terminal-container {
@@ -19,25 +20,25 @@ $terminal-header-height: 30px;
 }
 
 #terminal-header {
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  background-color: $grey-color-dark;
+  height: $terminal-header-height;
+  border-top-left-radius: $terminal-header-roundness-radius;
+  border-top-right-radius: $terminal-header-roundness-radius;
   border-bottom: 1px solid $grey-color-light;
+  background-color: $grey-color-dark;
   color: whitesmoke;
   font-weight: bold;
-  height: $terminal-header-height;
   text-align: center;
 }
 
 #terminal-title {
   line-height: $terminal-header-height;
-  text-shadow: 0 0 2px black;
   vertical-align: middle;
+  text-shadow: 0 0 2px black;
 }
 
 #terminal-line {
-  color: $grey-color-light;
   line-height: 1.2;
+  color: $grey-color-light;
 }
 
 .terminal-prompt {
@@ -45,12 +46,12 @@ $terminal-header-height: 30px;
 }
 
 input.terminal-command {
-  border: 0;
-  background-color: transparent;
-  font-family: "Ubuntu Mono", monospace;
-  outline: none;
   line-height: 1.2;
   max-width: 100%;
+  background-color: transparent;
+  border: 0;
+  outline: none;
+  font-family: "Ubuntu Mono", monospace;
   font-size: inherit;
 
   // Dirty trick to hide the default blinking caret but keep text visible
