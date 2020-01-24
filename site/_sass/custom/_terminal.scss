@@ -1,6 +1,11 @@
+// Colours
 $terminal-background: #000000;
 
+// Sizes
+$terminal-header-height: 30px;
+
 #terminal-body {
+  border: 1px solid #000000;
   padding-top: 2px;
   background-color: $terminal-background;
   background-image: $background-nodes-image;
@@ -8,24 +13,31 @@ $terminal-background: #000000;
 }
 
 #terminal-container {
-  border: 1px solid #000000;
-  background-color: #eef;
   margin-bottom: $spacing-unit;
   margin-top: $spacing-unit;
   font-family: "Ubuntu Mono", monospace;
 }
 
 #terminal-header {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
   background-color: $grey-color-dark;
-  background-image: $background-wavy-image;
   border-bottom: 1px solid $grey-color-light;
-  height: 30px;
+  color: whitesmoke;
+  font-weight: bold;
+  height: $terminal-header-height;
+  text-align: center;
+}
+
+#terminal-title {
+  line-height: $terminal-header-height;
+  text-shadow: 0px 0px 2px black;
+  vertical-align: middle;
 }
 
 #terminal-line {
   color: $grey-color-light;
   line-height: 1.2;
-  width: 100%
 }
 
 .terminal-prompt {
