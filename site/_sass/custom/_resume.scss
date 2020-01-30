@@ -17,7 +17,13 @@
   display: flex;
   flex-flow: column;
   align-items: center;
+  border-bottom: 1px solid $grey-color-light;
 }
+
+.cv-container > .cv-header > .executive-summary {
+  max-width: 80%;
+}
+
 
 .cv-container > .cv-content {
   grid-area: cv-content;
@@ -25,15 +31,4 @@
 
 .cv-container > .cv-left-sidebar {
   grid-area: cv-left-sidebar;
-}
-
-.avatar {
-  display: inline-block;
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: cover;
 }
