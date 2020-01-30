@@ -14,8 +14,14 @@ $terminal-header-roundness-radius: 10px;
 }
 
 #terminal-container {
+  max-width: -webkit-calc(#{$content-width} - (#{$spacing-unit} * 2));
+  max-width:         calc(#{$content-width} - (#{$spacing-unit} * 2));
+  margin-right: auto;
+  margin-left: auto;
   margin-bottom: $spacing-unit;
   margin-top: $spacing-unit;
+  padding-right: $spacing-unit;
+  padding-left: $spacing-unit;
   font-family: "Ubuntu Mono", monospace;
 }
 

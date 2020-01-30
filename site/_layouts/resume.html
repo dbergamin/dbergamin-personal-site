@@ -2,23 +2,19 @@
 <html lang="{{ page.lang | default: site.lang | default: "en" }}">
   {%- include head.html -%}
   <body class="background-nodes">
-    <div class="cv-container">
+    <div class="default-container">
       {%- include header.html -%}
-      <main class="page-content background-plain" aria-label="Content">
-        <div class="wrapper" itemscope itemtype="http://schema.org/Person">
-          <meta itemprop="telephone" content="{{ site.contact_telephone }}"/>
-    
-          <header class="page-header">
-            <img src="assets/images/avatar.jpg" alt="my photo" class="avatar no-print" itemprop="image">
-            <h1 class="header-name" itemprop="name">{{ site.contact_name }}</h1>
-    
-            <div class="executive-summary" itemprop="description">
-              <p>IT professional with a track record in increasing the rate at which teams can safely deliver customer value. I specialise in automating release processes, building the tools and fostering the culture that shifts quality and security left.</p>
-              <p>As a generalist, I am driven by a need to understand and own the end-to-end delivery of solutions both new and legacy; partly to achieve the best outcome for clients, but also to keep my technical curiosity in check!</p>
-            </div>
-    
-          </header>
-
+      <div class="cv-container page-content background-plain">
+        <header class="cv-header">
+          <!--<span class="avatar" role="img" aria-label="profile picture" style="background-image:url('assets/images/avatar.jpg')"></span>-->
+          <img src="assets/images/avatar.jpg" alt="my photo" class="avatar no-print" itemprop="image">
+          <h1 class="header-name" itemprop="name">{{ site.contact_name }}</h1>
+          <div class="executive-summary" itemprop="description">
+            <p>IT professional with a track record in increasing the rate at which teams can safely deliver customer value. I specialise in automating release processes, building the tools and fostering the culture that shifts quality and security left.</p>
+            <p>As a generalist, I am driven by a need to understand and own the end-to-end delivery of solutions both new and legacy; partly to achieve the best outcome for clients, but also to keep my technical curiosity in check!</p>
+          </div>
+        </header>
+        <main class="cv-content" aria-label="Content" itemscope itemtype="http://schema.org/Person">  
           <section class="content-section">
     
             <header class="section-header">
@@ -89,10 +85,11 @@
     
           </section>
           <!-- end Skills -->
-      </main>
-      <aside>
-
-      </aside>
+        </main>
+        <aside class="cv-left-sidebar">
+          
+        </aside>
+      </div>
       {%- include footer.html -%}
     </div>
   </body>

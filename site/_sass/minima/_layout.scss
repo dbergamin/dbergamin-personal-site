@@ -13,19 +13,19 @@
   height: 100vh;
 }
 
-.default-container > header {
+.default-container > .site-header {
   grid-area: header;
 }
 
-.default-container > header > nav {
-  grid-area: nav;
-  margin-left: 0.5rem;
+.default-container > .page-content {
+  grid-area: content;
+  justify-self: center;
+  width: 70%;
+  min-width: 480px;
+  padding: 10px;
 }
 
-.default-container > main {
-  grid-area: content;
-}
-.default-container > footer {
+.default-container > .site-footer {
   grid-area: footer;
 }
 
@@ -36,9 +36,7 @@
   border-top: 5px solid $grey-color-dark;
   border-bottom: 1px solid $grey-color-light;
   min-height: $spacing-unit * 1.865;
-
-  // Positioning context for the mobile navigation icon
-  position: relative;
+  text-align: center;
 }
 
 .site-title {
@@ -47,7 +45,6 @@
   line-height: $base-line-height * $base-font-size * 2.25;
   letter-spacing: -1px;
   margin-bottom: 0;
-  float: left;
   color: $highlight-color;
 
   &,
@@ -57,7 +54,6 @@
 }
 
 .site-nav {
-  float: right;
   line-height: $base-line-height * $base-font-size * 2.25;
 
   .nav-trigger {
