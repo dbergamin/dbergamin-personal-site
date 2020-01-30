@@ -7,7 +7,10 @@ baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://danielbergamin.net" # the base hostname & protocol for your site, e.g. http://example.com
 github_username:  dbergamin
 
-# Build settings
+contact_email: daniel@bergam.in
+contact_name: Daniel Bergamin
+contact_telephone: +44 7903 104727
+
 plugins:
   - jekyll-feed
 
