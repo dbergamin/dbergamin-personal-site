@@ -6,7 +6,6 @@
       {%- include header.html -%}
       <div class="cv-container page-content background-plain">
         <header class="cv-header">
-          <!--<span class="avatar" role="img" aria-label="profile picture" style="background-image:url('assets/images/avatar.jpg')"></span>-->
           <img src="assets/images/avatar.jpg" alt="my photo" class="avatar no-print" itemprop="image">
           <h1 class="header-name" itemprop="name">{{ site.contact_name }}</h1>
           <div class="executive-summary" itemprop="description">
@@ -16,60 +15,18 @@
         </header>
         <main class="cv-content" aria-label="Content" itemscope itemtype="http://schema.org/Person">  
           <section class="content-section">
-    
             <header class="section-header">
               <h2>Career Summary</h2>
             </header>
 
             <div id="career-summary" class="resume-item-details">
-              <p>Started out as consultant/developer at ServiceRocket selling, speccing and delivering add-ons and migrations for the Atlassian ALM tools, and then tossing them over the 'wall' to customers ops teams.</p>
-              <p>Craving the satisfaction of longer-term ownership and continuous longer-term feature delivery, I moved to Transport for NSW, first building out a greenfield platform to deliver their revamped primary customer facing web property transportnsw.info, and then operating and improving both the platform and the website in production for a year and a half.</p>
+              <p>Started out as <span id="cv-link-servicerocket-consultant" class="cv-link">consultant/developer at ServiceRocket</span> selling, speccing and delivering add-ons and migrations for the Atlassian ALM tools, and then tossing them over the 'wall' to customers ops teams.</p>
+              <p>Craving the satisfaction of longer-term ownership and continuous longer-term feature delivery, I moved to <span id="cv-link-tfnsw-cloud" class="cv-link">Transport for NSW</span>, first building out a greenfield platform to deliver their revamped primary customer facing web property transportnsw.info, and then operating and improving both the platform and the website in production for a year and a half.</p>
               <p>My recent work at WorldFirst took me into the operational sysadmin territory I missed by jumping straight from being a developer to building immutable infrastructure and serverless solutions. There was an need to continously deliver applications on a fleet of bare-metal servers running in co-lo datacentres for the first six months, after which I took a lead role in their migration to public cloud for the latter part of the engagement.</p>
               <p>I'm always on the lookout for my next challenge. Please <a href="mailto:{{ site.contact_email }}" class="contact-button no-print" itemprop="email">get in touch</a> if you'd like to work with me on a passion project or commercial engagement.</p>
             </div>
           </section>
 
-          <section class="content-section">
-    
-            <header class="section-header">
-              <h2>Position Detail</h2>
-            </header>
-
-            <div class="cv-item cv-item-role" itemscope itemprop="founder" itemtype="http://schema.org/Organization">
-              <h3 class="cv-item-title" itemprop="name">Digital Frontiers</h3>
-              <p class="cv-item-details" itemprop="description">Consultant</p>
-              <p class="cv-item-duration" itemprop="description">Jul '18—</p>
-              <p class="cv-item-details">Digital Frontiers is a consultancy that I operate. We help to nurture and grow a DevOps mindset and capability within larger organisations.
-              We work at the ground level and endeavor to <a href=https://devops.com/devops-shift-left-avoid-failure>shift left</a> to move responsiblity and control to where it is most effective.</p>
-            </div>
-            <div class="cv-item cv-item-contract" itemscope itemprop="worksFor" itemtype="http://schema.org/Organization">
-              <h3 class="cv-item-title resume-client-title" itemprop="name">WorldFirst</h3>
-              <p class="cv-item-details" itemprop="description"></p>
-              <p class="cv-item-duration" itemprop="description">Jul '18—</p>
-              <p class="cv-item-copy">Digital Frontiers is a consultancy that I operate. We help to nurture and grow a DevOps mindset and capability within larger organisations.
-              We work at the ground level and endeavor to <a href=https://devops.com/devops-shift-left-avoid-failure/>shift left</a> to move responsiblity and control to where it is most effective.</p>
-            </div>
-            <div class="resume-item" itemscope itemprop="worksFor" itemtype="http://schema.org/Organization">
-              <h3 class="resume-item-title" itemprop="name">Digital Frontiers</h3>
-              <h4 class="resume-item-details" itemprop="description">Consultant &bull; Jul '18—</h4>
-              <p class="resume-item-copy">Digital Frontiers is a consultancy that I operate. We help to nurture and grow a DevOps mindset and capability within larger organisations.
-              We work at the ground level and endeavor to <a href=https://devops.com/devops-shift-left-avoid-failure/>shift left</a> to move responsiblity and control to where it is most effective.</p>
-            </div>
-            <div class="resume-item" itemscope itemprop="worksFor" itemtype="http://schema.org/Organization">
-              <h3 class="resume-item-title" itemprop="name">Digital Frontiers</h3>
-              <h4 class="resume-item-details" itemprop="description">Consultant &bull; Jul '18—</h4>
-              <p class="resume-item-copy">Digital Frontiers is a consultancy that I operate. We help to nurture and grow a DevOps mindset and capability within larger organisations.
-              We work at the ground level and endeavor to <a href=https://devops.com/devops-shift-left-avoid-failure/>shift left</a> to move responsiblity and control to where it is most effective.</p>
-            </div>
-            <div class="resume-item" itemscope itemprop="worksFor" itemtype="http://schema.org/Organization">
-              <h3 class="resume-item-title" itemprop="name">Digital Frontiers</h3>
-              <h4 class="resume-item-details" itemprop="description">Consultant &bull; Jul '18—</h4>
-              <p class="resume-item-copy">Digital Frontiers is a consultancy that I operate. We help to nurture and grow a DevOps mindset and capability within larger organisations.
-              We work at the ground level and endeavor to <a href=https://devops.com/devops-shift-left-avoid-failure/>shift left</a> to move responsiblity and control to where it is most effective.</p>
-            </div>
-
-          </section>
-    
           <!-- begin Skills -->
           <section class="content-section">
     
@@ -85,6 +42,77 @@
     
           </section>
           <!-- end Skills -->
+        
+          <div id="modal-backdrop" class="modal">
+            <div id="cv-item-digitalfrontiers-founder" class="cv-item cv-item-role" itemscope itemprop="founder" itemtype="http://schema.org/Organization">
+              <span class="close">&times;</span>
+              <h3 class="cv-item-title" itemprop="name">Digital Frontiers</h3>
+              <p class="cv-item-details" itemprop="description">Consultant</p>
+              <p class="cv-item-duration" itemprop="description">Jul '18—</p>
+              <p class="cv-item-details">Digital Frontiers is a consultancy that I operate. We help to nurture and grow a DevOps mindset and capability within larger organisations.
+              We work at the ground level and endeavor to <a href=https://devops.com/devops-shift-left-avoid-failure>shift left</a> to move responsiblity and control to where it is most effective.</p>
+            </div>
+            <div class="cv-item cv-item-contract" itemscope itemprop="worksFor" itemtype="http://schema.org/Organization">
+              <span class="close">&times;</span>
+              <h3 class="cv-item-title resume-client-title" itemprop="name">WorldFirst</h3>
+              <p class="cv-item-details" itemprop="description"></p>
+              <p class="cv-item-duration" itemprop="description">Jul '18—</p>
+              <p class="cv-item-copy">Digital Frontiers is a consultancy that I operate. We help to nurture and grow a DevOps mindset and capability within larger organisations.
+              We work at the ground level and endeavor to <a href=https://devops.com/devops-shift-left-avoid-failure/>shift left</a> to move responsiblity and control to where it is most effective.</p>
+            </div>
+            <div id="cv-item-tfnsw-cloud" class="cv-item cv-item-role" itemscope itemprop="worksFor" itemtype="http://schema.org/Organization">
+              <h3 class="resume-item-title" itemprop="name">Transport for NSW</h3>
+              <h4 class="resume-item-details" itemprop="description">Cloud Platform Engineer</h4>
+              <p class="resume-item-copy">I worked on the transportnsw.info delivery team for just over two years, wearing many hats in the process:</p>
+              <ul>
+                <li>As a developer in the cross functional developer productivity and cloud team, I worked on continuous delivery enablers, aiming to safely ship releases after each sprint with high confidence.</li>
+                <li>As an infrastructure engineer, I used a combination of CloudFormation (DSL), Docker, Jenkins, Ansible & Ruby to maintain infrastructure in code as a deployable artifact. In the latter part of the project this shifted to working with AWS Lambda for a lot of new-build functionality.</li>
+                <li>As a SME in Atlassian productivity tools, I advise on and implemented custom solutions across the Transport cluster that utilise Atlassian applications (JIRA, Confluence, Bitbucket) as a platform.</li>
+              </ul>
+            </div>
+            <div id="cv-item-servicerocket-consultant" class="cv-item cv-item-role" itemscope itemprop="worksFor" itemtype="http://schema.org/Organization">
+              <h3 class="resume-item-title" itemprop="name">ServiceRocket</h3>
+              <h4 class="resume-item-details" itemprop="description">Consultant</h4>
+              <p class="resume-item-copy">Role:</p>
+              <ul>
+                <li>Lead business process consulting and review with a focus on best-practice usage of Atlassian JIRA and Confluence.</li>
+                <li>DevOps consulting focused around usage of JIRA, Stash and Bamboo (CI/CD, git workflows, plugin development to integrate with bespoke tools).</li>
+                <li>Configuration of Java webapp hosting infrastructure including variety of web-servers (inc load balancing), Tomcat and Jetty on Unix/Windows.</li>
+                <li>Architecture, design and development of tooling for custom integrations, migrations, SSO/Auth, primarily using Java/Groovy.</li>
+              </ul>
+            </div>
+          <script type='text/javascript'>
+            // Short-n-sweet Script to power the modal boxes            
+            var modal = document.getElementById("modal-backdrop");
+
+            var closeTheModal = document.getElementsByClassName("close")[0];
+            // When the user clicks on <span> (x), close the modal
+            closeTheModal.onclick = function() {
+              modal.style.display = "none";
+            }
+            
+            // When the user clicks anywhere outside of the modal, close it
+            window.onclick = function(event) {
+              if (event.target == modal) {
+                modal.style.display = "none";
+              }
+            }
+
+            // Link the modal popups to the text links
+            let roles = [
+              'servicerocket-consultant',
+              'tfnsw-cloud'
+            ];
+
+            for (var role of roles) {
+              var link = document.getElementById(`cv-link-${role}`);
+              link.onclick = function() {
+                modal.style.display = "block";
+                document.getElementById(`cv-item-${role}`).style.display="block";
+              }
+            }
+          </script>
+          </section>        
         </main>
         <aside class="cv-left-sidebar">
           

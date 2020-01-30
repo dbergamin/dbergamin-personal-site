@@ -24,11 +24,21 @@
   max-width: 80%;
 }
 
-
 .cv-container > .cv-content {
   grid-area: cv-content;
 }
 
 .cv-container > .cv-left-sidebar {
   grid-area: cv-left-sidebar;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+}
+
+.cv-item {
+  @extend .modal-content;
+}
+
+.cv-link {
+  @extend a;
 }
