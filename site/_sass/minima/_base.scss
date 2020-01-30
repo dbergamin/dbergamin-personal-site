@@ -111,16 +111,8 @@ a {
   }
 
   &:hover {
-    color: $text-color;
+    color: $highlight-color;
     text-decoration: underline;
-  }
-
-  .social-media-list &:hover {
-    text-decoration: none;
-
-    .username {
-      text-decoration: underline;
-    }
   }
 }
 

@@ -1,3 +1,34 @@
+.default-container {
+  display: grid;
+
+  grid-template-areas:
+    "header"
+    "content"
+    "footer";
+
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr auto;
+  grid-gap: 10px;
+
+  height: 100vh;
+}
+
+.default-container > header {
+  grid-area: header;
+}
+
+.default-container > header > nav {
+  grid-area: nav;
+  margin-left: 0.5rem;
+}
+
+.default-container > main {
+  grid-area: content;
+}
+.default-container > footer {
+  grid-area: footer;
+}
+
 /**
  * Site header
  */
@@ -102,7 +133,6 @@
 }
 
 
-
 /**
  * Site footer
  */
@@ -171,8 +201,6 @@
   }
 }
 
-
-
 /**
  * Page content
  */
@@ -207,8 +235,6 @@
   display: block;
   @include relative-font-size(1.5);
 }
-
-
 
 /**
  * Posts
