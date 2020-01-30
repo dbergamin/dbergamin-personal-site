@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: site.lang | default: "en" }}">
+  {%- include head.html -%}
+  <body class="background-nodes">
+    <div class="cv-container">
+      {%- include header.html -%}
+      <main class="page-content background-plain" aria-label="Content">
+        <div class="wrapper" itemscope itemtype="http://schema.org/Person">
+          <meta itemprop="telephone" content="{{ site.contact_telephone }}"/>
+    
+          <header class="page-header">
+            <img src="assets/images/avatar.jpg" alt="my photo" class="avatar no-print" itemprop="image">
+            <h1 class="header-name" itemprop="name">{{ site.contact_name }}</h1>
+    
+            <div class="executive-summary" itemprop="description">
+              <p>IT professional with a track record in increasing the rate at which teams can safely deliver customer value. I specialise in automating release processes, building the tools and fostering the culture that shifts quality and security left.</p>
+              <p>As a generalist, I am driven by a need to understand and own the end-to-end delivery of solutions both new and legacy; partly to achieve the best outcome for clients, but also to keep my technical curiosity in check!</p>
+            </div>
+    
+          </header>
+
+          <section class="content-section">
+    
+            <header class="section-header">
+              <h2>Career Summary</h2>
+            </header>
+
+            <div id="career-summary" class="resume-item-details">
+              <p>Started out as consultant/developer at ServiceRocket selling, speccing and delivering add-ons and migrations for the Atlassian ALM tools, and then tossing them over the 'wall' to customers ops teams.</p>
+              <p>Craving the satisfaction of longer-term ownership and continuous longer-term feature delivery, I moved to Transport for NSW, first building out a greenfield platform to deliver their revamped primary customer facing web property transportnsw.info, and then operating and improving both the platform and the website in production for a year and a half.</p>
+              <p>My recent work at WorldFirst took me into the operational sysadmin territory I missed by jumping straight from being a developer to building immutable infrastructure and serverless solutions. There was an need to continously deliver applications on a fleet of bare-metal servers running in co-lo datacentres for the first six months, after which I took a lead role in their migration to public cloud for the latter part of the engagement.</p>
+              <p>I'm always on the lookout for my next challenge. Please <a href="mailto:{{ site.contact_email }}" class="contact-button no-print" itemprop="email">get in touch</a> if you'd like to work with me on a passion project or commercial engagement.</p>
+            </div>
+          </section>
+
+          <section class="content-section">
+    
+            <header class="section-header">
+              <h2>Position Detail</h2>
+            </header>
+
+            <div class="cv-item cv-item-role" itemscope itemprop="founder" itemtype="http://schema.org/Organization">
+              <h3 class="cv-item-title" itemprop="name">Digital Frontiers</h3>
+              <p class="cv-item-details" itemprop="description">Consultant</p>
+              <p class="cv-item-duration" itemprop="description">Jul '18—</p>
+              <p class="cv-item-details">Digital Frontiers is a consultancy that I operate. We help to nurture and grow a DevOps mindset and capability within larger organisations.
+              We work at the ground level and endeavor to <a href=https://devops.com/devops-shift-left-avoid-failure>shift left</a> to move responsiblity and control to where it is most effective.</p>
+            </div>
+            <div class="cv-item cv-item-contract" itemscope itemprop="worksFor" itemtype="http://schema.org/Organization">
+              <h3 class="cv-item-title resume-client-title" itemprop="name">WorldFirst</h3>
+              <p class="cv-item-details" itemprop="description"></p>
+              <p class="cv-item-duration" itemprop="description">Jul '18—</p>
+              <p class="cv-item-copy">Digital Frontiers is a consultancy that I operate. We help to nurture and grow a DevOps mindset and capability within larger organisations.
+              We work at the ground level and endeavor to <a href=https://devops.com/devops-shift-left-avoid-failure/>shift left</a> to move responsiblity and control to where it is most effective.</p>
+            </div>
+            <div class="resume-item" itemscope itemprop="worksFor" itemtype="http://schema.org/Organization">
+              <h3 class="resume-item-title" itemprop="name">Digital Frontiers</h3>
+              <h4 class="resume-item-details" itemprop="description">Consultant &bull; Jul '18—</h4>
+              <p class="resume-item-copy">Digital Frontiers is a consultancy that I operate. We help to nurture and grow a DevOps mindset and capability within larger organisations.
+              We work at the ground level and endeavor to <a href=https://devops.com/devops-shift-left-avoid-failure/>shift left</a> to move responsiblity and control to where it is most effective.</p>
+            </div>
+            <div class="resume-item" itemscope itemprop="worksFor" itemtype="http://schema.org/Organization">
+              <h3 class="resume-item-title" itemprop="name">Digital Frontiers</h3>
+              <h4 class="resume-item-details" itemprop="description">Consultant &bull; Jul '18—</h4>
+              <p class="resume-item-copy">Digital Frontiers is a consultancy that I operate. We help to nurture and grow a DevOps mindset and capability within larger organisations.
+              We work at the ground level and endeavor to <a href=https://devops.com/devops-shift-left-avoid-failure/>shift left</a> to move responsiblity and control to where it is most effective.</p>
+            </div>
+            <div class="resume-item" itemscope itemprop="worksFor" itemtype="http://schema.org/Organization">
+              <h3 class="resume-item-title" itemprop="name">Digital Frontiers</h3>
+              <h4 class="resume-item-details" itemprop="description">Consultant &bull; Jul '18—</h4>
+              <p class="resume-item-copy">Digital Frontiers is a consultancy that I operate. We help to nurture and grow a DevOps mindset and capability within larger organisations.
+              We work at the ground level and endeavor to <a href=https://devops.com/devops-shift-left-avoid-failure/>shift left</a> to move responsiblity and control to where it is most effective.</p>
+            </div>
+
+          </section>
+    
+          <!-- begin Skills -->
+          <section class="content-section">
+    
+            <header class="section-header">
+              <h2>Skills</h2>
+            </header>
+            {% for skill in site.data.skills %}
+            <div class="resume-item">
+              <h4 class="resume-item-details">{{ skill.skill }}</h4>
+              <p class="resume-item-copy">{{ skill.description }}</p>
+            </div>
+            {% endfor %}
+    
+          </section>
+          <!-- end Skills -->
+      </main>
+      <aside>
+
+      </aside>
+      {%- include footer.html -%}
+    </div>
+  </body>
+
+</html>

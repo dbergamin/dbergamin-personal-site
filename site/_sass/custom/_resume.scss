@@ -1,0 +1,36 @@
+.cv-container {
+  display: grid;
+
+  grid-template-areas:
+    "header header header"
+    "nav content side"
+    "footer footer footer";
+
+  grid-template-columns: 200px 1fr 200px;
+  grid-template-rows: auto 1fr auto;
+  grid-gap: 10px;
+
+  height: 100vh;
+}
+
+.cv-container > header {
+  grid-area: header;
+}
+
+.cv-container > header > nav {
+  grid-area: nav;
+  margin-left: 0.5rem;
+}
+
+.cv-container > main {
+  grid-area: content;
+}
+
+.cv-container > aside {
+  grid-area: side;
+  margin-right: 0.5rem;
+}
+
+.cv-container > footer {
+  grid-area: footer;
+}
