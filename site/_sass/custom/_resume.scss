@@ -26,6 +26,7 @@
 
 .cv-container > .cv-content {
   grid-area: cv-content;
+  padding: 20px;
 }
 
 .cv-container > .cv-left-sidebar {
@@ -35,10 +36,21 @@
   align-items: center;
 }
 
+.cv-item-details {
+  text-align: justify;
+}
+
 .cv-item {
   @extend .modal-content;
+  width: 60%;
+  min-width: $content-min-width;
 }
 
 .cv-link {
   @extend a;
+  //text-transform: uppercase;
+  background: #ffffff;
+  padding: 1px;
+  border: 1px solid darken($highlight-color, 15%);
+  border-radius: 5px;
 }

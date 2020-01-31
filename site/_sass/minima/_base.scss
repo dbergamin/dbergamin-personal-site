@@ -112,19 +112,21 @@ h1, h2, h3, h4, h5, h6 {
  * Links
  */
 a {
-  color: $highlight-color;
+  color: $link-color;
   text-decoration: none;
 
   &:visited {
-    color: darken($highlight-color, 15%);
+    color: darken($link-color, 15%);
   }
 
   &:hover {
-    color: $highlight-color;
+    color: $link-color;
     text-decoration: underline;
   }
 }
 
+// Mailto
+a[href^="mailto"]:hover:after { content: " > " attr(address); }
 
 /**
  * Blockquotes

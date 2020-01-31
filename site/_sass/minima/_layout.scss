@@ -21,7 +21,7 @@
   grid-area: content;
   justify-self: center;
   width: 70%;
-  min-width: 480px;
+  min-width: $content-zone-min-width;
   padding: 10px;
 }
 
