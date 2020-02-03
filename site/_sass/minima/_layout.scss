@@ -21,8 +21,9 @@
   grid-area: content;
   justify-self: center;
   width: 70%;
-  min-width: $content-zone-min-width;
+  min-width: $content-min-width;
   padding: 10px;
+  z-index: 1;
 }
 
 .default-container > .site-footer {
@@ -57,7 +58,7 @@
   line-height: $base-line-height * $base-font-size * 2.25;
 
   .nav-trigger {
-      display: none;
+    display: none;
   }
 
   .menu-icon {
@@ -134,7 +135,7 @@
  */
 .site-footer {
   border-top: 1px solid $grey-color-light;
-  padding: $spacing-unit 0;
+  padding: $spacing-unit;
 }
 
 .footer-heading {
@@ -201,7 +202,6 @@
  * Page content
  */
 .page-content {
-  padding: $spacing-unit 0;
   flex: 1;
 }
 

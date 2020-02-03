@@ -28,6 +28,7 @@ $content-width:     800px !default;
 
 $on-palm:           600px !default;
 $on-laptop:         800px !default;
+$laptop-size:       800px !default;
 
 // Use media queries like this:
 // @include media-query($on-palm) {
@@ -53,5 +54,6 @@ $on-laptop:         800px !default;
   "minima/syntax-highlighting",
   "custom/background",
   "custom/terminal",
-  "custom/resume"
+  "custom/resume",
+  "custom/timeline"
 ;

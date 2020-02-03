@@ -1,0 +1,73 @@
+/* Timeline */
+/* Inspired by a codepen from Alan Houser */
+/* https://codepen.io/alanhouser/pen/aErrQJ */
+
+/* Variables */
+$background: #252827;
+
+$color-primary: #004ffc;
+$spacing: 30px;
+$radius: 4px;
+
+$date: 120px;
+$dotborder: 4px;
+$dot: 11px;
+$line: 4px;
+
+$font-title: sans-serif;
+$font-text: sans-serif;
+
+#timeline-content {
+  margin-top: $spacing + $base-font-size;
+  text-align: center;
+}
+
+.timeline {
+  border-right: $line solid $grey-color;
+  border-bottom-right-radius: $radius;
+  border-top-right-radius: $radius;
+  letter-spacing: 0.5px;
+  line-height: 1.4em;
+  padding: $spacing;
+  list-style: none;
+  max-width: 30%;
+}
+
+.timeline-date {
+  padding-bottom: ($spacing * 0.5);
+  margin-bottom: $spacing;
+  position: relative;
+
+  &:last-of-type {
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
+
+  &:before, &:after {
+    position: absolute;
+  }
+
+  &:before {
+    left: ($date + $spacing / 2) * -1;
+    content: attr(data-date);
+    text-align: right;
+    font-weight: 100;
+    font-size: 0.9em;
+    min-width: $date;
+    font-family: $font-title;
+    text-transform: uppercase;
+    color: $grey-color;
+    font-weight: bold;
+  }
+
+  &:after {
+    box-shadow: 0 0 0 $dotborder fade($link-color,100%);
+    right: ($spacing + $line + ($dot * 0.35)) * -1;
+    background: $highlight-color;
+    border-radius: 50%;
+    height: $dot;
+    width: $dot;
+    content: "";
+    top: 5px;
+  }
+}

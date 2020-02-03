@@ -1,39 +1,65 @@
 .cv-container {
   display: grid;
 
-  grid-template-areas: 
-    "cv-header cv-header"
-    "cv-left-sidebar cv-content";
+  @media (max-width: $laptop-size) {
+    grid-template-areas: 
+      "cv-header"
+      "cv-content"
+      "cv-footer";
+    grid-template-columns: 1fr;
+  }
+  
+  @media (min-width: $laptop-size) {
+    grid-template-areas: 
+      "cv-header cv-header"
+      "cv-left-sidebar cv-content"
+      "cv-footer cv-footer";
+    grid-template-columns: 200px 1fr;
+  }
 
-  grid-template-columns: 200px 1fr;
-  grid-template-rows: auto 1fr;
+  grid-template-rows: auto 1fr auto;
   grid-gap: 10px;
+  
+  > .cv-header {
+    grid-area: cv-header;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    border-bottom: 1px solid $grey-color-light;
 
-  height: 100%;
-}
+    > .executive-summary {
+      max-width: 80%;
+    }
+  }
 
-.cv-container > .cv-header {
-  grid-area: cv-header;
-  display: flex;
-  flex-flow: column;
-  align-items: center;
-  border-bottom: 1px solid $grey-color-light;
-}
+  > .cv-content {
+    grid-area: cv-content;
+    padding: 20px;
+  }
 
-.cv-container > .cv-header > .executive-summary {
-  max-width: 80%;
-}
+  > .cv-left-sidebar {
+    grid-area: cv-left-sidebar;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
 
-.cv-container > .cv-content {
-  grid-area: cv-content;
-  padding: 20px;
-}
+    @media (max-width: $laptop-size) {
+      display: none;
+    }
+  }
 
-.cv-container > .cv-left-sidebar {
-  grid-area: cv-left-sidebar;
-  display: flex;
-  flex-flow: column;
-  align-items: center;
+  > .cv-footer {
+    grid-area: cv-footer;
+    display: flex;
+    border-top: 1px solid $grey-color-light;
+    padding-top: $spacing-unit;
+    
+    .pdf-download-link {
+      margin: auto;
+      display: flex;
+      
+    }
+  }
 }
 
 .cv-item-details {
@@ -48,7 +74,6 @@
 
 .cv-link {
   @extend a;
-  //text-transform: uppercase;
   background: #ffffff;
   padding: 1px;
   border: 1px solid darken($highlight-color, 15%);
