@@ -19,7 +19,7 @@
 
   grid-template-rows: auto 1fr auto;
   grid-gap: 10px;
-  
+
   > .cv-header {
     grid-area: cv-header;
     display: flex;
@@ -54,10 +54,11 @@
     border-top: 1px solid $grey-color-light;
     padding-top: $spacing-unit;
     
-    .pdf-download-link {
+    > .cv-footer-content {
       margin: auto;
       display: flex;
-      
+      flex-flow: column;
+      max-width: 80%;
     }
   }
 }
