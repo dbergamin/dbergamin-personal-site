@@ -1,11 +1,11 @@
 title: Daniel Bergamin
 email: daniel@bergam.in
-description: >- # this means to ignore newlines until "baseurl:"
-  The personal site of Daniel Bergamin. I have a broad interest in the
-  people, technologies and systems that underpin the modern web.  
-baseurl: "" # the subpath of your site, e.g. /blog
+description: >- # ignore newlines until "baseurl:"
+  You're visiting the personal site of Daniel Bergamin. I'm interested in the people, technologies 
+  and systems that underpin the modern web and like to <a href="blog.html">write about them</a> sometimes.
+baseurl: ""
 url: "https://danielbergamin.net" # the base hostname & protocol for your site, e.g. http://example.com
-github_username:  dbergamin
+github_username: dbergamin
 
 contact_email: daniel@bergam.in
 contact_name: Daniel Bergamin
