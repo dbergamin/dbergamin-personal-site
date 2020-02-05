@@ -63,7 +63,7 @@
   }
 }
 
-.cv-item-details {
+.cv-item-summary {
   text-align: justify;
 }
 
@@ -71,11 +71,36 @@
   @extend .modal-content;
   width: 60%;
   min-width: $content-min-width;
+  
+  > .cv-item-title {
+    margin-bottom: 0px;
+    text-align: center;
+  }
+
+  > .cv-item-position {
+    color: $grey-color;
+  }
+}
+
+.cv-item-contract {
+  display: flex;
+  padding-top: $spacing-unit / 2;
+  border-top: $grey-color solid 1px;
+
+  &:before {
+    content: attr(contract-position-title);
+    max-width: 100px;
+    min-width: 100px;
+    text-align: left;
+    text-transform: uppercase;
+    color: $grey-color;
+    font-weight: bold;
+  }
 }
 
 .cv-link {
   @extend a;
-  background: #ffffff;
+  background: white;
   padding: 1px;
   border: 1px solid darken($highlight-color, 15%);
   border-radius: 5px;

@@ -71,3 +71,9 @@ $font-text: sans-serif;
     top: 5px;
   }
 }
+
+.current-position {
+  &:before {
+    color: black;
+  }
+}
