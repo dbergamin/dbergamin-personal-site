@@ -125,6 +125,22 @@ a {
   }
 }
 
+/* 
+ * External links
+ * Thanks DerZyklop: https://stackoverflow.com/a/25410621
+ */
+a[href*="//"]:not([href*="danielbergamin.net"]):not([href*="danielbergamin.local"]) {
+  &:after {
+    display: inline-flex;
+    content: ' ';
+    background-image: url('/assets/images/ext_link_fontawesome.svg');
+    background-size: 12px 12px;
+    height: 12px;
+    width: 12px;
+    margin-left: 2px;
+  }
+}
+
 // Mailto
 a[href^="mailto"]:hover:after { content: " > " attr(address); }
 
