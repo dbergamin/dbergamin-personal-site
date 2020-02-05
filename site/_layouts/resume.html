@@ -62,12 +62,22 @@
         <p class="cv-item-position" itemprop="description">Director / DevOps Consultant</p>
         <p class="cv-item-role">Digital Frontiers is a consultancy that I operate. We help to nurture and grow a DevOps mindset and capability within larger organisations.
         We work at the ground level and endeavor to <a href="https://devops.com/devops-shift-left-avoid-failure" target="_blank">shift left</a> to move responsiblity and control to where it is most effective.</p>
+        <p class="cv-item-role">Our customers include:</p>
+        <div class="cv-item-role cv-item-contract" contract-position-title="WorldFirst">
+          <ul>
+            <li>Aug 2018 — Jan 2019: Hands-on promotion of the DevOps way within the infrastructure team.</li>
+            <li>Jan 2019 — Jul 2019: Migrate all client production services from inhouse datacentre environment to public cloud.</li>
+            <li>Sep 2019 — Nov 2019: Update IT DR/BCP processes for cloud infrastructure; conduct full DR test to recertify all services.</li>
+            <li>Nov 2019 — Dec 2019: Rearchitect and migrate some services to new managed Kubernetes cluster - the next gen platform.</li> 
+            <li>More details here: <span class="cv-link-worldfirst-devops cv-link">WorldFirst</span>.</li>
+          </ul>
+        </div>
       </div>
       <div id="cv-item-worldfirst-devops" class="cv-item" itemscope itemprop="worksFor" itemtype="http://schema.org/Organization">
         <span class="close">&times;</span>
         <h3 class="cv-item-title" itemprop="name">WorldFirst</h3>
         <p class="cv-item-position" itemprop="description">Client of Digital Frontiers</p>
-        <p class="cv-item-role">I fulfilled four blocks of work with WorldFirst on behalf of Digital Fronters:</p>
+        <p class="cv-item-role">I fulfilled four blocks of work with WorldFirst on behalf of <span class="cv-link-digitalfrontiers-founder cv-link">Digital Frontiers</span>:</p>
         <div class="cv-item-role cv-item-contract" contract-position-title="Devops Specialist">
           <ul>
             <li>Improve the performance and robustness of release mechanisms for existing legacy applications.</li>
@@ -78,9 +88,9 @@
         </div>
         <div class="cv-item-role cv-item-contract" contract-position-title="Cloud Migration Tech Lead">
           <ul>
-            <li>Utilising the understanding of applications fostered over my first engagement and my prior experience building and operating public cloud infrastructure, I took a leading technical role in the migration of all systems from co-lo datacentres to public cloud.</li>
-            <li>Re-provisioning traditional VM-based infrastructure in a leader/follower multi-DC setup as a multi-AZ cloud deployment, adapting deployment pipelines to simultaneously release to both platforms and then orchestrating cutovers.</li>
-            <li>Apply a variety of stability and security improvements in the re-provisioning process.</li>
+            <li>Used the understanding of applications fostered in my first engagement and my prior experience as a Cloud Engineer to take a leading technical role in the migration of all systems from datacentres to public cloud.</li>
+            <li>Re-provisioned traditional VM-based infrastructure in a leader/follower multi-DC pattern as a multi-AZ cloud deployment, simultaneously releasing to both platforms and orchestrating cutovers.</li>
+            <li>Opportunistically applied a variety of stability and security improvements during the re-provisioning process.</li>
           </ul>
         </div>
         <div class="cv-item-role cv-item-contract" contract-position-title="IT DR/BCP Tech Lead">
@@ -91,8 +101,8 @@
         </div>
         <div class="cv-item-role cv-item-contract" contract-position-title="Devops Specialist">
           <ul>
-            <li>Leverage my relationships with development teams to drive re-architecting and migration of an internal Java application to a new cloud-native platform running Kubernetes on public cloud.</li>
-            <li>Extending the new platform to support a managed Kafka capability, as the application dealt with streaming data from several sources.</li>
+            <li>Leveraged my relationships with development teams to drive re-architecture and migration of an internal suite of Java services to a new cloud-native platform running managed K8s.</li>
+            <li>Work on extending the new platform to support a managed Kafka capability, to replace a self-managed Kafka cluster in the legacy cloud environment.</li>
           </ul>
         </div>
       </div>
@@ -114,11 +124,11 @@
         <h4 class="cv-item-position" itemprop="description">Consultant</h4>
         <p class="cv-item-role">I started out as a part time support engineer whilst pursuing my degree, moving onto a junior developer and finally a consultant position with ServiceRocket. The consultant position involved:</p>
         <ul>
-          <li>Business process consulting with a focus on best-practice usage of Atlassian JIRA and Confluence.</li>
-          <li>DevOps consulting focused around usage of JIRA, Stash and Bamboo & git. Help organisations adopt CI/CD, and develop custom plugins to integrate with inhouse tools.</li>
-          <li>Configuration of Java webapp hosting infrastructure including variety of web-servers (inc load balancing), Tomcat and Jetty on Unix/Windows.</li>
+          <li>Business process consulting: assist clients with workflow, reporting and structure on Atlassian JIRA and Confluence.</li>
+          <li>DevOps consulting: usage of JIRA, Stash and Bamboo & git. Help organisations adopt CI/CD, and develop custom plugins to integrate with inhouse tools.</li>
+          <li>Configuration of Java webapp hosting infrastructure including various supported load balancers, application servers and databases on Unix/Windows.</li>
           <li>Architecture, design and development (Java/Groovy) for custom integrations, migrations and SSO/Authenticator plugins for Atlassian products.</li>
-          <li>Pre-sales activies including requirement gathering, preparation of estimates and services schedules for statements of work, and technical responses to RFI/RFPs.</li>
+          <li>Pre-sales activies, including requirement gathering, creating estimates and services schedules for statements of work, and technical responses to RFI/RFPs.</li>
         </ul>
       </div>
       <!-- Short-n-sweet inline script to power the modal boxes. 
@@ -161,6 +171,9 @@
           var cvLinks = document.getElementsByClassName(`cv-link-${role}`);
           for (const cvLink of cvLinks) {
             cvLink.onclick = function() {
+              if (modal.style.display === "block") {
+                closeTheModal();
+              }
               modal.style.display = "block";
               document.getElementById(`cv-item-${role}`).style.display="block";
             }

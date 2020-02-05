@@ -88,13 +88,19 @@
   border-top: $grey-color solid 1px;
 
   &:before {
+    display: inherit;
+    align-items: center;
     content: attr(contract-position-title);
-    max-width: 100px;
-    min-width: 100px;
+    max-width: 110px;
+    min-width: 110px;
     text-align: left;
     text-transform: uppercase;
     color: $grey-color;
     font-weight: bold;
+  }
+
+  > ul > li {
+    margin-top: 5px;
   }
 }
 
