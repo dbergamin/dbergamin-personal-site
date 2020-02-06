@@ -1,5 +1,6 @@
 ---
 layout: post
+author: Daniel Bergamin
 title:  "Welcome to Jekyll!"
 date:   2020-01-15 15:14:11 +0000
 categories: jekyll update
