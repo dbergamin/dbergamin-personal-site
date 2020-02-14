@@ -1,18 +1,17 @@
 ---
 layout: page
-title: About
-permalink: /about/
+title: About Me
 ---
 
-This is the base Jekyll theme. You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at [jekyllrb.com](https://jekyllrb.com/)
+I'm Daniel, [tech enthusiast][cv], hailing from Sydney, Australia. I currently reside and work in London, where I run a personal devops consultancy, Digital Frontiers.
 
-You can find the source code for Minima at GitHub:
-[jekyll][jekyll-organization] /
-[minima](https://github.com/jekyll/minima)
+If you've just stumbled on this site, [this post][getting-started] sums things up pretty well. 
 
-You can find the source code for Jekyll at GitHub:
-[jekyll][jekyll-organization] /
-[jekyll](https://github.com/jekyll/jekyll)
+Domains that I own:
+- bergam.in
+- danielbergamin.net
 
+GPG: 4A6EE62C5F92B4BD
 
-[jekyll-organization]: https://github.com/jekyll
+[cv]: {% link cv.markdown %}
+[getting-started]: {% link _posts/2020-02-06-about-this-site.markdown %}
