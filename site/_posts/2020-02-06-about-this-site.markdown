@@ -11,7 +11,7 @@ I've been obsessed with the web as a platform since discovering the wonders of G
 
 The tech stack here is as plain as practical; with the blog powered by [Jekyll][jekyll-gh] and a bunch of static pages built with HTML5, CSS3 (compiled from SCSS to help keep things consistant) and a little bit of [Vanilla JS][vanilla-js]. The Jekyll minima theme provided an excellent foundation to get started, which I've trimmed down where possible. Page weight is light enough to keep things unminified for the curious, while still loading in a snappy fashion.
 
-In time, I hope for this site to carry a bit of that early internet, personal page spirit forwards. The source for this site and build pipelines is all available on [Github][github-dbergamin-personal-site] under the MIT license - please feel free to copy and re-use anything as you please.
+In time, I hope for this site to carry a bit of that early internet, personal page spirit forward. The source for this site and build pipelines is all available on [Github][github-dbergamin-personal-site] under the MIT license - please feel free to copy and re-use anything as you please.
 
 [euro-bike-touring]:              https://www.sheldonbrown.com/euhansen.html
 [susans-sourdough]:               http://www.wildyeastblog.com/what-its-about/

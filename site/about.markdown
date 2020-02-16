@@ -11,7 +11,9 @@ Domains that I own:
 - bergam.in
 - danielbergamin.net
 
-GPG: 4A6EE62C5F92B4BD
+GPG:
+- long:  4A6EE62C5F92B4BD
+- short: 5F92B4BD 
 
 [cv]: {% link cv.markdown %}
 [getting-started]: {% link _posts/2020-02-06-about-this-site.markdown %}
