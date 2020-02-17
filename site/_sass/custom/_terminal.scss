@@ -10,6 +10,7 @@ $terminal-header-roundness-radius: 10px;
   padding-top: 2px;
   border: 1px solid #000;
   background-color: $terminal-background;
+  overflow-y: scroll;
 }
 
 #terminal-container {
@@ -41,7 +42,7 @@ $terminal-header-roundness-radius: 10px;
   text-shadow: 0 0 2px black;
 }
 
-#terminal-line {
+.terminal-line {
   line-height: 1.2;
   color: $grey-color-light;
 }

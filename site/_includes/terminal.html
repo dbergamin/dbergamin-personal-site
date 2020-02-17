@@ -3,22 +3,29 @@
      <span id="terminal-title">dansh - guest@danielbergamin.net</span>
   </div>
   <div id="terminal-body" class="background-nodes">
-    <div id="terminal-line">
+    <div id="terminal-command-template" style="display: none">
+      <span class="terminal-prompt"></span>
+      <span class="terminal-command"></span>
+    </div>
+    <div id="terminal-output-template" style="display: none">
+      <span class="terminal-output"></span>
+    </div>
+    <div class="terminal-line">
       <span class="terminal-prompt">guest@danielbergamin.net:~ $ </span>
       <span class="terminal-command">cd public/</span>
     </div>
-    <div id="terminal-line">
+    <div class="terminal-line">
       <span class="terminal-prompt">guest@danielbergamin.net:~/public $ </span>
       <span class="terminal-command">ls</span>
     </div>
-    <div id="terminal-line">
+    <div class="terminal-line">
       <span class="terminal-output">
         <span><a href="{% link blog.markdown %}">[ blog/ ]</a></span>
         <span><a href="{% link about.markdown %}">[ about.html ]</a></span>
         <span><a href="{% link cv.markdown %}">[ cv.html ]</a></span>
       </span>
     </div>
-    <div id="terminal-line">
+    <div class="terminal-line">
       <span class="terminal-prompt">guest@danielbergamin.net:~/public $ </span>
       <input id="active-terminal-command" class="terminal-command" autofocus/><span id="terminal-cursor">█</span>
     </div>
@@ -28,9 +35,10 @@
 <!-- Make our vanity shell interface tick -->
 <script type="text/javascript">
   // Make the input resize dynamically so the fake blinking caret can stick at the end
-  var consoleInput = document.querySelector('#active-terminal-command');
-  consoleInput.addEventListener('input', resizeInput);
-  resizeInput.call(consoleInput);
+  var TERMINAL_BODY = document.querySelector('#terminal-body');
+  var TERMINAL_INPUT = document.querySelector('#active-terminal-command');
+  TERMINAL_INPUT.addEventListener('input', resizeInput);
+  resizeInput.call(TERMINAL_INPUT);
 
   function resizeInput() {
     // Throw an error if too much text gets dumped in
@@ -50,13 +58,16 @@
   // Constants
   const RETURN = 13;
   
+  // Globals
+  var TERMINAL_ACTIVE_DIR = ["~","public"];
+
   // List of commands
   supportedCommands = {
     'print(.*)?': commandPrint
   }
 
-  // REPL logic
-  consoleInput.addEventListener('keyup', evaluate);
+  // REPL 'logic'
+  TERMINAL_INPUT.addEventListener('keyup', evaluate);
   function evaluate(event) {
     matchedCommand = false;
 
@@ -65,7 +76,9 @@
       Object.keys(supportedCommands).forEach(function(command) {
         if (input.match(command)) {
           // If input matches a command definition, invoke the command with the raw input string
-          supportedCommands[command](input);
+          spacePosition = input.indexOf(" ");
+          userCommandArgs = input.substring(spacePosition + 1);
+          supportedCommands[command](userCommandArgs);
           matchedCommand = true;
         }
       });
@@ -73,18 +86,67 @@
       if (!matchedCommand) {
         commandNotFound(input);
       }
+      
+      // Reset the active command prompt
+      TERMINAL_BODY.lastElementChild.getElementsByClassName('terminal-command')[0].value = '';
+      resizeInput.call(TERMINAL_INPUT);
+      TERMINAL_BODY.scrollTop = TERMINAL_BODY.scrollHeight;
     }
   }
 
-  // Adding new lines
-  function print(text) {
+  /*
+   * Records the current command and prepare the terminal for the next command
+   * 1. Create a new terminal line object with values based on the command entered
+   * 2. Drop it into place in the 'shell' on the penultimate line
+   * 3. Clean up the active command line so the user can type a new command
+   */
+  function recordCommandInTerminal() {
+    // Grab the final line of the terminal; containing the active command and store the command text
+    var lastLine = TERMINAL_BODY.lastElementChild;
+    var commandText = lastLine.getElementsByClassName('terminal-command')[0].value;
+
+    // Create the line to be returned with appropriate values and insert it
+    var newLine = document.querySelector('#terminal-command-template').cloneNode(true);
+    newLine.getElementsByClassName('terminal-command')[0].innerText = commandText;
+    newLine.getElementsByClassName('terminal-prompt')[0].innerText = getTerminalPath();
     
+    // Clean out the template markers
+    newLine.id = '';
+    newLine.className = 'terminal-line';
+    newLine.removeAttribute('style');
+
+    // Insert it
+    TERMINAL_BODY.insertBefore(newLine,lastLine);
   }
 
-  // Command implementations
-  function commandPrint(input) {
-    var terminalBody = document.querySelector('#terminal-body');
+  function getTerminalPath() {
+    return `guest@danielbergamin.net:${TERMINAL_ACTIVE_DIR.join('/')} $`;
+  }
+
+  function print(text) {
+    var lastLine = TERMINAL_BODY.lastElementChild;
+
+    // Create the line to be returned with appropriate values and insert it
+    var newLine = document.querySelector('#terminal-output-template').cloneNode(true);
+    newLine.getElementsByClassName('terminal-output')[0].innerText = text;
     
+    // Clean out the template markers
+    newLine.id = '';
+    newLine.className = 'terminal-line';
+    newLine.removeAttribute('style');
+
+    // Insert it
+    TERMINAL_BODY.insertBefore(newLine,lastLine);
+  }
+
+  /*
+   * Command implementations
+   */
+
+  // Prints a new line onto the terminal
+  function commandPrint(text) {
+    recordCommandInTerminal();
+    print(text);
   }
 
   function commandNotFound(input) {
