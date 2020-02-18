@@ -56,18 +56,36 @@
 
   /* Logic to handle basic commands */
   // Constants
+  const NO_ARGS = "";
   const RETURN = 13;
+  const FILE = "_file_object";
   
-  // Globals
+  // Globals holding the 'terminal' state
+  // It would be great if JS supported more appropriate data types, but I'd rather slog through
+  // with objects and arrays than add a dependency for a very limited problem.
   var TERMINAL_ACTIVE_DIR = ["~","public"];
+  var TERMINAL_FILESYSTEM = {
+    "~": {
+      'public': {
+        "blog": {
+          "TODO :)": FILE
+        },
+        "about.html": FILE,
+        "cv.html": FILE
+      }
+    }
+  };
 
   // List of commands
   supportedCommands = {
+    'cd(.*)?': commandChangeDir,
+    'ls(.*)?': commandListDir,
     'print(.*)?': commandPrint
-  }
+  };
 
   // REPL 'logic'
   TERMINAL_INPUT.addEventListener('keyup', evaluate);
+  
   function evaluate(event) {
     matchedCommand = false;
 
@@ -75,9 +93,17 @@
       input = this.value.toLowerCase();
       Object.keys(supportedCommands).forEach(function(command) {
         if (input.match(command)) {
+          // Record the user input
+          recordCommandInTerminal();
+
           // If input matches a command definition, invoke the command with the raw input string
           spacePosition = input.indexOf(" ");
-          userCommandArgs = input.substring(spacePosition + 1);
+          var userCommandArgs;
+          if (spacePosition >= 0) {
+            userCommandArgs = input.substring(spacePosition + 1);
+          } else {
+            userCommandArgs = NO_ARGS;
+          }
           supportedCommands[command](userCommandArgs);
           matchedCommand = true;
         }
@@ -102,55 +128,80 @@
    */
   function recordCommandInTerminal() {
     // Grab the final line of the terminal; containing the active command and store the command text
-    var lastLine = TERMINAL_BODY.lastElementChild;
-    var commandText = lastLine.getElementsByClassName('terminal-command')[0].value;
+    var commandLine = TERMINAL_BODY.lastElementChild;
+    var commandText = commandLine.getElementsByClassName('terminal-command')[0].value;
 
-    // Create the line to be returned with appropriate values and insert it
+    // Create the line to be returned with appropriate values
     var newLine = document.querySelector('#terminal-command-template').cloneNode(true);
-    newLine.getElementsByClassName('terminal-command')[0].innerText = commandText;
-    newLine.getElementsByClassName('terminal-prompt')[0].innerText = getTerminalPath();
-    
-    // Clean out the template markers
-    newLine.id = '';
-    newLine.className = 'terminal-line';
-    newLine.removeAttribute('style');
+    with (newLine) {
+      getElementsByClassName('terminal-command')[0].innerText = commandText;
+      getElementsByClassName('terminal-prompt')[0].innerText = getTerminalPath();
+      id = '';
+      className = 'terminal-line';
+      removeAttribute('style');
+    }
 
     // Insert it
-    TERMINAL_BODY.insertBefore(newLine,lastLine);
+    TERMINAL_BODY.insertBefore(newLine,commandLine);
+  }
+
+  function printFiles(files) {
+
+  }
+
+  function printText(text) {
+    var commandLine = TERMINAL_BODY.lastElementChild;
+
+    // Create the line to be returned from the template
+    var newLine = document.querySelector('#terminal-output-template').cloneNode(true);
+
+    with (newLine) {
+      getElementsByClassName('terminal-output')[0].innerText = text;
+      id = '';
+      className = 'terminal-line';
+      removeAttribute('style');
+    }
+
+    // Insert it
+    TERMINAL_BODY.insertBefore(newLine,commandLine);
   }
 
   function getTerminalPath() {
     return `guest@danielbergamin.net:${TERMINAL_ACTIVE_DIR.join('/')} $`;
   }
 
-  function print(text) {
-    var lastLine = TERMINAL_BODY.lastElementChild;
-
-    // Create the line to be returned with appropriate values and insert it
-    var newLine = document.querySelector('#terminal-output-template').cloneNode(true);
-    newLine.getElementsByClassName('terminal-output')[0].innerText = text;
-    
-    // Clean out the template markers
-    newLine.id = '';
-    newLine.className = 'terminal-line';
-    newLine.removeAttribute('style');
-
-    // Insert it
-    TERMINAL_BODY.insertBefore(newLine,lastLine);
-  }
-
   /*
    * Command implementations
+   * Parameters:
+   *   args: The raw string that follows the space after the command invocation
+   *         e.g. the command "print hello 123" would pass "hello 123" in as args.
    */
 
   // Prints a new line onto the terminal
-  function commandPrint(text) {
-    recordCommandInTerminal();
-    print(text);
+  function commandPrint(args) {
+    printText(args);
   }
 
-  function commandNotFound(input) {
-    alert("command " + input + " not found");
+  // List contents of directory
+  function commandListDir() {
+    var i = 0;
+    var seekDir = TERMINAL_FILESYSTEM;
+    while (i < TERMINAL_ACTIVE_DIR.length) {
+      seekDir = seekDir[TERMINAL_ACTIVE_DIR[i]];
+      i = i + 1;
+    }
+
+    // seekDir will now hold the contents of the active directory, which we want to list
+    printFiles(seekDir);
+  }
+
+  // Move the directory
+  function commandChangeDir() {
+    //TODO
+  }
+
+  function commandNotFound(args) {
+    alert("command " + args + " not found");
   }
 
   // Generic error behaviour
