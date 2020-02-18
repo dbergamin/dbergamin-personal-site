@@ -58,7 +58,7 @@
   // Constants
   const NO_ARGS = "";
   const RETURN = 13;
-  const FILE = "_file_object";
+  const NOT_VIEWABLE = "plain_file_object_";
   
   // Globals holding the 'terminal' state
   // It would be great if JS supported more appropriate data types, but I'd rather slog through
@@ -66,22 +66,33 @@
   var TERMINAL_ACTIVE_DIR = ["~","public"];
   var TERMINAL_FILESYSTEM = {
     "~": {
-      'public': {
+      ".": NOT_VIEWABLE,
+      "public": {
+        ".": "/",
         "blog": {
-          "TODO :)": FILE
+          ".": "/blog/"
         },
-        "about.html": FILE,
-        "cv.html": FILE
+        "about.html": "/about.html",
+        "cv.html": "/cv.html"
       }
     }
   };
 
-  // List of commands
-  supportedCommands = {
-    'cd(.*)?': commandChangeDir,
-    'ls(.*)?': commandListDir,
-    'print(.*)?': commandPrint
-  };
+  class TerminalCommand {
+    constructor(name, regex, exec, helptext) {
+      this.name = name;
+      this.regex = regex;
+      this.exec = exec;
+      this.helptext = helptext;
+    }
+  }
+
+  var TERMINAL_COMMANDS = [
+    new TerminalCommand('cd', '^cd(.*)?', commandChangeDir, "Changes the active directory"),
+    new TerminalCommand('help', '^help(.*)?', commandHelp, "Prints help information"),
+    new TerminalCommand('ls', '^ls(.*)?', commandListDir, "Prints filesystem objects in the active directory"),
+    new TerminalCommand('print', '^print(.*)?', commandPrint, "Echoes given text")
+  ];
 
   // REPL 'logic'
   TERMINAL_INPUT.addEventListener('keyup', evaluate);
@@ -91,20 +102,20 @@
 
     if (event.keyCode === RETURN) {
       input = this.value.toLowerCase();
-      Object.keys(supportedCommands).forEach(function(command) {
-        if (input.match(command)) {
+      Object.keys(TERMINAL_COMMANDS).forEach(function(command_id) {
+        if (input.match(TERMINAL_COMMANDS[command_id].regex)) {
           // Record the user input
           recordCommandInTerminal();
 
           // If input matches a command definition, invoke the command with the raw input string
-          spacePosition = input.indexOf(" ");
           var userCommandArgs;
+          spacePosition = input.indexOf(" ");
           if (spacePosition >= 0) {
             userCommandArgs = input.substring(spacePosition + 1);
           } else {
             userCommandArgs = NO_ARGS;
           }
-          supportedCommands[command](userCommandArgs);
+          TERMINAL_COMMANDS[command_id].exec(userCommandArgs);
           matchedCommand = true;
         }
       });
@@ -128,8 +139,8 @@
    */
   function recordCommandInTerminal() {
     // Grab the final line of the terminal; containing the active command and store the command text
-    var commandLine = TERMINAL_BODY.lastElementChild;
-    var commandText = commandLine.getElementsByClassName('terminal-command')[0].value;
+    var activeCommandLine = TERMINAL_BODY.lastElementChild;
+    var commandText = activeCommandLine.getElementsByClassName('terminal-command')[0].value;
 
     // Create the line to be returned with appropriate values
     var newLine = document.querySelector('#terminal-command-template').cloneNode(true);
@@ -142,15 +153,40 @@
     }
 
     // Insert it
-    TERMINAL_BODY.insertBefore(newLine,commandLine);
+    TERMINAL_BODY.insertBefore(newLine,activeCommandLine);
   }
 
+  // Prints files to terminal output
   function printFiles(files) {
+    var activeCommandLine = TERMINAL_BODY.lastElementChild;
+
+    // Create the line to be returned from the template
+    var newLine = document.querySelector('#terminal-output-template').cloneNode(true);
+    with (newLine) {
+      id = '';
+      className = 'terminal-line';
+      removeAttribute('style');
+    }
+
+    // Populate the new line with the file output
+    var filesHtmlOutput = [];
+    for (const rawFsObject in files) {
+      // Check if the raw object is an object or a string to check if it is a file or directory
+      var fsObject = new TerminalFsObject(rawFsObject, files[rawFsObject], files[rawFsObject] instanceof Object);
+      filesHtmlOutput.push(fsObject.renderToHtml());
+    }
+
+    for (const fileOutput in filesHtmlOutput) {
+      newLine.appendChild(filesHtmlOutput[fileOutput]);
+    }
+
+    // Finally, add the new line to the DOM
+    TERMINAL_BODY.insertBefore(newLine,activeCommandLine);
 
   }
 
   function printText(text) {
-    var commandLine = TERMINAL_BODY.lastElementChild;
+    var activeCommandLine = TERMINAL_BODY.lastElementChild;
 
     // Create the line to be returned from the template
     var newLine = document.querySelector('#terminal-output-template').cloneNode(true);
@@ -163,7 +199,7 @@
     }
 
     // Insert it
-    TERMINAL_BODY.insertBefore(newLine,commandLine);
+    TERMINAL_BODY.insertBefore(newLine,activeCommandLine);
   }
 
   function getTerminalPath() {
@@ -200,6 +236,14 @@
     //TODO
   }
 
+  function commandHelp() {
+    var output = "Welcome to my toy terminal; dansh. Currently supported commands:\n";
+    for (command in TERMINAL_COMMANDS) {
+      output = output + `${TERMINAL_COMMANDS[command].name}: ${TERMINAL_COMMANDS[command].helptext}\n`;
+    }
+    printText(output);
+  }
+
   function commandNotFound(args) {
     alert("command " + args + " not found");
   }
@@ -207,6 +251,29 @@
   // Generic error behaviour
   function leaveMeAlone() {
     alert("Please don't try to break my fragile imitation of a shell, no bug bounties to be found here.");
+  }
+
+  class TerminalFsObject {
+    constructor(name, data, isDir) {
+      this.name = name;
+      this.isDir = isDir;
+      this.isFile = !isDir;
+
+      if (this.isFile) {
+        this.weblink = data;
+      } else if (isDir) {
+        this.weblink = data['.'];
+      } else {
+        leaveMeAlone();
+      }
+    }
+
+    // Renders HTML for output onto the terminal
+    renderToHtml() {
+      var fileOutput = document.createElement('span');
+      fileOutput.innerHTML = `<a href='${this.weblink}'>[ ${this.name} ]</a> `;
+      return fileOutput;
+    }
   }
 
 </script>
