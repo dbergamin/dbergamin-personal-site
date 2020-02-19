@@ -37,27 +37,6 @@
   This has gradually got a bit spaghetti and needs a refactor.
 -->
 <script type="text/javascript">
-  // Make the input resize dynamically so the fake blinking caret can stick at the end
-  var TERMINAL_BODY = document.querySelector('#terminal-body');
-  var TERMINAL_INPUT = document.querySelector('#active-terminal-command');
-  TERMINAL_INPUT.addEventListener('input', resizeInput);
-  resizeInput.call(TERMINAL_INPUT);
-
-  function resizeInput() {
-    // Throw an error if too much text gets dumped in
-    if (this.getBoundingClientRect().width >= this.parentElement.getBoundingClientRect().width) {
-      leaveMeAlone();
-      this.value = "";
-    }
-    this.style.width = this.value.length + "ch";
-  }
-
-  // Make the entire line focus the input as it will start at zero length
-  document.querySelector('#terminal-body').addEventListener("click",function() {
-    document.querySelector('#active-terminal-command').focus();
-  });
-
-  /* Logic to handle basic commands */
   // Constants
   const KEYPRESS_RETURN = 13;
   const KEYPRESS_UP = 38; 
@@ -67,7 +46,10 @@
 
   // Globals holding the 'terminal' state
   // It would be great if JS supported more appropriate data types, but I'd rather slog through
-  // with objects and arrays than add a dependency for a very limited pactiveCommandLine.getElementsByClassName('terminal-command')[0].value("abc123")roblem.
+  // with objects and arrays than add a dependency for a very limited problem.
+  var TERMINAL_BODY = document.querySelector('#terminal-body');
+  var TERMINAL_ACTIVE_COMMAND_LINE = TERMINAL_BODY.lastElementChild;
+  var TERMINAL_ACTIVE_COMMAND = document.querySelector('#active-terminal-command'); 
   var TERMINAL_ACTIVE_DIR = ["~","public"];
   var TERMINAL_COMMAND_HISTORY = [];
   var TERMINAL_COMMAND_HISTORY_POSITION = NO_COMMAND_HISTORY_CYCLED;
@@ -84,6 +66,7 @@
       }
     }
   };
+
 
   class TerminalCommand {
     constructor(name, regex, exec, helptext) {
@@ -123,60 +106,96 @@
     new TerminalCommand('print', '^print(.*)?', commandPrint, "Print some text to the terminal output")
   ];
 
-  // REPL 'logic'
-  TERMINAL_INPUT.addEventListener('keyup', evaluate);
-  
-  function evaluate(event) {
-    matchedCommand = false;
+  class TerminalInterface {
 
-    if (event.keyCode === KEYPRESS_RETURN) {
-      input = this.value.toLowerCase();
-      TERMINAL_COMMAND_HISTORY_POSITION = NO_COMMAND_HISTORY_CYCLED;
+    constructor() {
+      this.wireTerminalUIEvents();
+    }
 
-      Object.keys(TERMINAL_COMMANDS).forEach(function(command_id) {
-        if (input.match(TERMINAL_COMMANDS[command_id].regex)) {
-          // Record the user input
-          recordCommand();
-
-          // If input matches a command definition, invoke the command with the raw input string
-          var userCommandArgs;
-          spacePosition = input.indexOf(" ");
-          if (spacePosition >= 0) {
-            userCommandArgs = input.substring(spacePosition + 1);
-          } else {
-            userCommandArgs = NO_ARGS;
-          }
-          TERMINAL_COMMANDS[command_id].exec(userCommandArgs);
-          matchedCommand = true;
-        }
+    wireTerminalUIEvents() {
+      // Make the entire line focus the input as it will start at zero length
+      TERMINAL_BODY.addEventListener("click",function() {
+        TERMINAL_ACTIVE_COMMAND.focus();
       });
-
-      if (!matchedCommand) {
-        commandNotFound(input);
-      }
       
-      // Reset the active command prompt and scroll it to the bottom
-      TERMINAL_BODY.lastElementChild.getElementsByClassName('terminal-command')[0].value = '';
-      TERMINAL_BODY.lastElementChild.getElementsByClassName('terminal-prompt')[0].innerText = getTerminalPrompt();
-      resizeInput.call(TERMINAL_INPUT);
-      TERMINAL_BODY.scrollTop = TERMINAL_BODY.scrollHeight;
-  
-    } else if (event.keyCode === KEYPRESS_UP) {
-      // Implement 'command history cycling'; pressing 'UP' retrieves past commands
-      if (TERMINAL_COMMAND_HISTORY.length >= 1) {
-        var activeCommandLine = TERMINAL_BODY.lastElementChild;
-        if (TERMINAL_COMMAND_HISTORY_POSITION == NO_COMMAND_HISTORY_CYCLED) {
-          TERMINAL_COMMAND_HISTORY_POSITION = TERMINAL_COMMAND_HISTORY.length - 1;
-        } else if (TERMINAL_COMMAND_HISTORY_POSITION == -1) {
-          // We have exhausted our pool of historical commands, do nothing
-          return;
+      // Resizing the input so caret stays at the end
+      TERMINAL_ACTIVE_COMMAND.addEventListener('input',function() {
+        // Throw an error if too much text gets dumped in
+        if (this.getBoundingClientRect().width >= this.parentElement.getBoundingClientRect().width) {
+          leaveMeAlone();
+          this.value = "";
         }
-        activeCommandLine.getElementsByClassName('terminal-command')[0].value = TERMINAL_COMMAND_HISTORY[TERMINAL_COMMAND_HISTORY_POSITION];
-        TERMINAL_COMMAND_HISTORY_POSITION--;
-        resizeInput.call(TERMINAL_INPUT);
+        this.style.width = this.value.length + "ch";
+      });
+      
+      // Trigger input event to activate the resizing
+      TERMINAL_ACTIVE_COMMAND.dispatchEvent(new Event('input'));
+      
+      // Hook up the eval method
+      TERMINAL_ACTIVE_COMMAND.addEventListener('keyup', this.evaluateInput);
+    }
+
+    triggerResize() {
+      TERMINAL_ACTIVE_COMMAND.dispatchEvent(new Event('input'));
+    }
+
+    evaluateInput(event) {
+      var matchedCommand = false;
+
+      if (event.keyCode === KEYPRESS_RETURN) {
+        var input = this.value.toLowerCase();
+        TERMINAL_COMMAND_HISTORY_POSITION = NO_COMMAND_HISTORY_CYCLED;
+
+        Object.keys(TERMINAL_COMMANDS).forEach(function(command_id) {
+          if (input.match(TERMINAL_COMMANDS[command_id].regex)) {
+            // Record the user input
+            recordCommand();
+
+            // If input matches a command definition, invoke the command with the raw input string
+            var userCommandArgs;
+            var spacePosition = input.indexOf(" ");
+            if (spacePosition >= 0) {
+              userCommandArgs = input.substring(spacePosition + 1);
+            } else {
+              userCommandArgs = NO_ARGS;
+            }
+            TERMINAL_COMMANDS[command_id].exec(userCommandArgs);
+            matchedCommand = true;
+          }
+        });
+
+        if (!matchedCommand) {
+          commandNotFound(input);
+        }
+        
+        // Reset the active command prompt and scroll it to the bottom
+        TERMINAL_ACTIVE_COMMAND_LINE.getElementsByClassName('terminal-command')[0].value = '';
+        TERMINAL_ACTIVE_COMMAND_LINE.getElementsByClassName('terminal-prompt')[0].innerText = getTerminalPrompt();
+        TERMINAL_ACTIVE_COMMAND.dispatchEvent(new Event('input'));
+        TERMINAL_BODY.scrollTop = TERMINAL_BODY.scrollHeight;
+    
+      } else if (event.keyCode === KEYPRESS_UP) {
+        // Implement 'command history cycling'; pressing 'UP' retrieves past commands
+        if (TERMINAL_COMMAND_HISTORY.length >= 1) {
+          if (TERMINAL_COMMAND_HISTORY_POSITION == NO_COMMAND_HISTORY_CYCLED) {
+            TERMINAL_COMMAND_HISTORY_POSITION = TERMINAL_COMMAND_HISTORY.length - 1;
+          } else if (TERMINAL_COMMAND_HISTORY_POSITION == -1) {
+            // We have exhausted our pool of historical commands, do nothing
+            return;
+          }
+          TERMINAL_ACTIVE_COMMAND_LINE.getElementsByClassName('terminal-command')[0].value = TERMINAL_COMMAND_HISTORY[TERMINAL_COMMAND_HISTORY_POSITION];
+          TERMINAL_COMMAND_HISTORY_POSITION--;
+          TERMINAL_ACTIVE_COMMAND.dispatchEvent(new Event('input'));
+        }
       }
     }
   }
+
+  var TERMINAL_INTERFACE = new TerminalInterface();
+
+  /*************************
+   ** Terminal behaviours **
+   *************************/
 
   /*
    * Records the current command and prepare the terminal for the next command
@@ -186,9 +205,8 @@
    */
   function recordCommand() {
     // Grab the final line of the terminal; containing the active command and store the command text
-    var activeCommandLine = TERMINAL_BODY.lastElementChild;
-    var commandText = activeCommandLine.getElementsByClassName('terminal-command')[0].value;
-    var promptText = activeCommandLine.getElementsByClassName('terminal-prompt')[0].innerText;
+    var commandText = TERMINAL_ACTIVE_COMMAND_LINE.getElementsByClassName('terminal-command')[0].value;
+    var promptText = TERMINAL_ACTIVE_COMMAND_LINE.getElementsByClassName('terminal-prompt')[0].innerText;
 
     // Create the line to be returned with appropriate values
     var newLine = document.querySelector('#terminal-command-template').cloneNode(true);
@@ -203,12 +221,11 @@
     TERMINAL_COMMAND_HISTORY.push(commandText);
 
     // Insert it into the DOM
-    TERMINAL_BODY.insertBefore(newLine,activeCommandLine);
+    TERMINAL_BODY.insertBefore(newLine,TERMINAL_ACTIVE_COMMAND_LINE);
   }
 
   // Prints files to terminal output
   function printFiles(files) {
-    var activeCommandLine = TERMINAL_BODY.lastElementChild;
 
     // Create the line to be returned from the template
     var newLine = document.querySelector('#terminal-output-template').cloneNode(true);
@@ -231,13 +248,10 @@
     }
 
     // Finally, add the new line to the DOM
-    TERMINAL_BODY.insertBefore(newLine,activeCommandLine);
-
+    TERMINAL_BODY.insertBefore(newLine,TERMINAL_ACTIVE_COMMAND_LINE);
   }
 
   function printText(text) {
-    var activeCommandLine = TERMINAL_BODY.lastElementChild;
-
     // Create the line to be returned from the template
     var newLine = document.querySelector('#terminal-output-template').cloneNode(true);
 
@@ -249,7 +263,7 @@
     }
 
     // Insert it
-    TERMINAL_BODY.insertBefore(newLine,activeCommandLine);
+    TERMINAL_BODY.insertBefore(newLine,TERMINAL_ACTIVE_COMMAND_LINE);
   }
 
   function getTerminalPrompt() {
@@ -281,12 +295,12 @@
     return path.startsWith("~") || path.startsWith("/");
   }
 
-  /*
+  /*******************************************************************************
    * Command implementations
    * Parameters:
    *   args: The raw string that follows the space after the command invocation
    *         e.g. the command "print hello 123" would pass "hello 123" in as args.
-   */
+   *******************************************************************************/
 
   // A lot of the hacky logic in here should be moved into a mini class handling terminal FS state
   // But perfect being the enemy of done, here we are...
