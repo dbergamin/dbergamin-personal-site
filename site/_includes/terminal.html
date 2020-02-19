@@ -56,14 +56,18 @@
 
   /* Logic to handle basic commands */
   // Constants
+  const KEYPRESS_RETURN = 13;
+  const KEYPRESS_UP = 38; 
   const NO_ARGS = "";
-  const RETURN = 13;
-  const NOT_VIEWABLE = "plain_file_object_";
-  
+  const NO_COMMAND_HISTORY_CYCLED = -2
+  const NOT_VIEWABLE = "plain_file_object_"; 
+
   // Globals holding the 'terminal' state
   // It would be great if JS supported more appropriate data types, but I'd rather slog through
-  // with objects and arrays than add a dependency for a very limited problem.
+  // with objects and arrays than add a dependency for a very limited pactiveCommandLine.getElementsByClassName('terminal-command')[0].value("abc123")roblem.
   var TERMINAL_ACTIVE_DIR = ["~","public"];
+  var TERMINAL_COMMAND_HISTORY = [];
+  var TERMINAL_COMMAND_HISTORY_POSITION = NO_COMMAND_HISTORY_CYCLED;
   var TERMINAL_FILESYSTEM = {
     "~": {
       ".": NOT_VIEWABLE,
@@ -87,11 +91,33 @@
     }
   }
 
+  class TerminalFsObject {
+    constructor(name, data, isDir) {
+      this.name = name;
+      this.isDir = isDir;
+      this.isFile = !isDir;
+
+      if (this.isFile) {
+        this.weblink = data;
+      } else if (isDir) {
+        this.weblink = data['.'];
+      }
+    }
+
+    // Renders HTML for output onto the terminal
+    renderToHtml() {
+      var fileOutput = document.createElement('span');
+      fileOutput.innerHTML = `<a href='${this.weblink}'>[ ${this.name} ]</a> `;
+      return fileOutput;
+    }
+  }
+
   var TERMINAL_COMMANDS = [
-    new TerminalCommand('cd', '^cd(.*)?', commandChangeDir, "Changes the active directory"),
-    new TerminalCommand('help', '^help(.*)?', commandHelp, "Prints help information"),
-    new TerminalCommand('ls', '^ls(.*)?', commandListDir, "Prints filesystem objects in the active directory"),
-    new TerminalCommand('print', '^print(.*)?', commandPrint, "Echoes given text")
+    new TerminalCommand('cd', '^cd(.*)?', commandChangeDir, "Changes the current directory"),
+    new TerminalCommand('clear', '^(clear|cls)(.*)?', commandClearScreen, "Clears the terminal contents"),
+    new TerminalCommand('help', '^help(.*)?', commandHelp, "Print help information"),
+    new TerminalCommand('ls', '^ls(.*)?', commandListDir, "Show clickable links to contents of current directory"),
+    new TerminalCommand('print', '^print(.*)?', commandPrint, "Print some text to the terminal output")
   ];
 
   // REPL 'logic'
@@ -100,12 +126,14 @@
   function evaluate(event) {
     matchedCommand = false;
 
-    if (event.keyCode === RETURN) {
+    if (event.keyCode === KEYPRESS_RETURN) {
       input = this.value.toLowerCase();
+      TERMINAL_COMMAND_HISTORY_POSITION = NO_COMMAND_HISTORY_CYCLED;
+
       Object.keys(TERMINAL_COMMANDS).forEach(function(command_id) {
         if (input.match(TERMINAL_COMMANDS[command_id].regex)) {
           // Record the user input
-          recordCommandInTerminal();
+          recordCommand();
 
           // If input matches a command definition, invoke the command with the raw input string
           var userCommandArgs;
@@ -124,10 +152,26 @@
         commandNotFound(input);
       }
       
-      // Reset the active command prompt
+      // Reset the active command prompt and scroll it to the bottom
       TERMINAL_BODY.lastElementChild.getElementsByClassName('terminal-command')[0].value = '';
+      TERMINAL_BODY.lastElementChild.getElementsByClassName('terminal-prompt')[0].innerText = getTerminalPath();
       resizeInput.call(TERMINAL_INPUT);
       TERMINAL_BODY.scrollTop = TERMINAL_BODY.scrollHeight;
+  
+    } else if (event.keyCode === KEYPRESS_UP) {
+      // Implement 'command history cycling'; pressing 'UP' retrieves past commands
+      if (TERMINAL_COMMAND_HISTORY.length >= 1) {
+        var activeCommandLine = TERMINAL_BODY.lastElementChild;
+        if (TERMINAL_COMMAND_HISTORY_POSITION == NO_COMMAND_HISTORY_CYCLED) {
+          TERMINAL_COMMAND_HISTORY_POSITION = TERMINAL_COMMAND_HISTORY.length - 1;
+        } else if (TERMINAL_COMMAND_HISTORY_POSITION == -1) {
+          // We have exhausted our pool of historical commands, do nothing
+          return;
+        }
+        activeCommandLine.getElementsByClassName('terminal-command')[0].value = TERMINAL_COMMAND_HISTORY[TERMINAL_COMMAND_HISTORY_POSITION];
+        TERMINAL_COMMAND_HISTORY_POSITION--;
+        resizeInput.call(TERMINAL_INPUT);
+      }
     }
   }
 
@@ -137,22 +181,25 @@
    * 2. Drop it into place in the 'shell' on the penultimate line
    * 3. Clean up the active command line so the user can type a new command
    */
-  function recordCommandInTerminal() {
+  function recordCommand() {
     // Grab the final line of the terminal; containing the active command and store the command text
     var activeCommandLine = TERMINAL_BODY.lastElementChild;
     var commandText = activeCommandLine.getElementsByClassName('terminal-command')[0].value;
+    var promptText = activeCommandLine.getElementsByClassName('terminal-prompt')[0].innerText;
 
     // Create the line to be returned with appropriate values
     var newLine = document.querySelector('#terminal-command-template').cloneNode(true);
     with (newLine) {
       getElementsByClassName('terminal-command')[0].innerText = commandText;
-      getElementsByClassName('terminal-prompt')[0].innerText = getTerminalPath();
+      getElementsByClassName('terminal-prompt')[0].innerText = promptText;
       id = '';
       className = 'terminal-line';
       removeAttribute('style');
     }
 
-    // Insert it
+    TERMINAL_COMMAND_HISTORY.push(commandText);
+
+    // Insert it into the DOM
     TERMINAL_BODY.insertBefore(newLine,activeCommandLine);
   }
 
@@ -206,6 +253,26 @@
     return `guest@danielbergamin.net:${TERMINAL_ACTIVE_DIR.join('/')} $`;
   }
 
+  function getPathFromString(path) {
+    if (path == '/') {
+      return ['~'];
+    }
+    return path.split('/');
+  }
+
+  // Check if a path exists
+  function isValidFilePath(path) {
+    var splitPath = getPathFromString(path)
+    var i = 0;
+    var seekDir = TERMINAL_FILESYSTEM;
+    while (i < splitPath.length && seekDir != undefined) {
+      seekDir = seekDir[splitPath[i]];
+      i = i + 1;
+    }
+    
+    return (seekDir != undefined)
+  }
+
   /*
    * Command implementations
    * Parameters:
@@ -213,13 +280,31 @@
    *         e.g. the command "print hello 123" would pass "hello 123" in as args.
    */
 
-  // Prints a new line onto the terminal
-  function commandPrint(args) {
-    printText(args);
+  function commandChangeDir(args) {
+    if (args.split(' ').length != 1 || args === NO_ARGS) {
+      printText('Usage: cd [DIRECTORY_PATH]');
+    } else {
+      if (isValidFilePath(args)) {
+        TERMINAL_ACTIVE_DIR = getPathFromString(args);
+      } else {
+        printText(`cd: directory ${args} not found`)
+      }
+    }
   }
 
-  // List contents of directory
-  function commandListDir() {
+  function commandClearScreen(args) {
+    console.log("clear the screen");
+  }
+
+  function commandHelp(args) {
+    var output = "This isn't a great way to navigate the site, but it was fun to make. Supported commands:\n";
+    for (command in TERMINAL_COMMANDS) {
+      output = output + `${TERMINAL_COMMANDS[command].name}: ${TERMINAL_COMMANDS[command].helptext}\n`;
+    }
+    printText(output);
+  }
+
+  function commandListDir(args) {
     var i = 0;
     var seekDir = TERMINAL_FILESYSTEM;
     while (i < TERMINAL_ACTIVE_DIR.length) {
@@ -227,53 +312,22 @@
       i = i + 1;
     }
 
-    // seekDir will now hold the contents of the active directory, which we want to list
     printFiles(seekDir);
   }
 
-  // Move the directory
-  function commandChangeDir() {
-    //TODO
-  }
-
-  function commandHelp() {
-    var output = "Welcome to my toy terminal; dansh. Currently supported commands:\n";
-    for (command in TERMINAL_COMMANDS) {
-      output = output + `${TERMINAL_COMMANDS[command].name}: ${TERMINAL_COMMANDS[command].helptext}\n`;
-    }
-    printText(output);
-  }
-
+  // Display an error if the command is not found.
   function commandNotFound(args) {
-    alert("command " + args + " not found");
+    alert("command " + args + " not found. Use `help` for more info.");
+  }
+
+
+  function commandPrint(args) {
+    printText(args);
   }
 
   // Generic error behaviour
   function leaveMeAlone() {
     alert("Please don't try to break my fragile imitation of a shell, no bug bounties to be found here.");
-  }
-
-  class TerminalFsObject {
-    constructor(name, data, isDir) {
-      this.name = name;
-      this.isDir = isDir;
-      this.isFile = !isDir;
-
-      if (this.isFile) {
-        this.weblink = data;
-      } else if (isDir) {
-        this.weblink = data['.'];
-      } else {
-        leaveMeAlone();
-      }
-    }
-
-    // Renders HTML for output onto the terminal
-    renderToHtml() {
-      var fileOutput = document.createElement('span');
-      fileOutput.innerHTML = `<a href='${this.weblink}'>[ ${this.name} ]</a> `;
-      return fileOutput;
-    }
   }
 
 </script>
