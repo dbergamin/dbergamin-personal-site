@@ -32,7 +32,10 @@
   </div>
 </div>
 
-<!-- Make our vanity shell interface tick -->
+<!-- 
+  Makes our toy terminal tick.
+  This has gradually got a bit spaghetti and needs a refactor.
+-->
 <script type="text/javascript">
   // Make the input resize dynamically so the fake blinking caret can stick at the end
   var TERMINAL_BODY = document.querySelector('#terminal-body');
@@ -154,7 +157,7 @@
       
       // Reset the active command prompt and scroll it to the bottom
       TERMINAL_BODY.lastElementChild.getElementsByClassName('terminal-command')[0].value = '';
-      TERMINAL_BODY.lastElementChild.getElementsByClassName('terminal-prompt')[0].innerText = getTerminalPath();
+      TERMINAL_BODY.lastElementChild.getElementsByClassName('terminal-prompt')[0].innerText = getTerminalPrompt();
       resizeInput.call(TERMINAL_INPUT);
       TERMINAL_BODY.scrollTop = TERMINAL_BODY.scrollHeight;
   
@@ -249,15 +252,16 @@
     TERMINAL_BODY.insertBefore(newLine,activeCommandLine);
   }
 
-  function getTerminalPath() {
+  function getTerminalPrompt() {
     return `guest@danielbergamin.net:${TERMINAL_ACTIVE_DIR.join('/')} $`;
   }
 
   function getPathFromString(path) {
     if (path == '/') {
       return ['~'];
+    } else {
+      return path.split('/');
     }
-    return path.split('/');
   }
 
   // Check if a path exists
@@ -273,6 +277,10 @@
     return (seekDir != undefined)
   }
 
+  function isAbsoluteFilePath(path) {
+    return path.startsWith("~") || path.startsWith("/");
+  }
+
   /*
    * Command implementations
    * Parameters:
@@ -280,20 +288,37 @@
    *         e.g. the command "print hello 123" would pass "hello 123" in as args.
    */
 
+  // A lot of the hacky logic in here should be moved into a mini class handling terminal FS state
+  // But perfect being the enemy of done, here we are...
   function commandChangeDir(args) {
-    if (args.split(' ').length != 1 || args === NO_ARGS) {
+    var pathToChangeTo = args;
+    if (pathToChangeTo.split(' ').length != 1 || pathToChangeTo === NO_ARGS) {
       printText('Usage: cd [DIRECTORY_PATH]');
     } else {
-      if (isValidFilePath(args)) {
-        TERMINAL_ACTIVE_DIR = getPathFromString(args);
+      if (pathToChangeTo == "..") {
+        if (TERMINAL_ACTIVE_DIR.length > 1) {
+          TERMINAL_ACTIVE_DIR.pop();
+        }
       } else {
-        printText(`cd: directory ${args} not found`)
+        // Transform relative paths into absolute
+        if (!isAbsoluteFilePath(pathToChangeTo)) {
+          pathToChangeTo = TERMINAL_ACTIVE_DIR.join('/').concat("/",pathToChangeTo);
+        }
+        if (isValidFilePath(pathToChangeTo)) {
+          TERMINAL_ACTIVE_DIR = getPathFromString(pathToChangeTo);
+        } else {
+          printText(`cd: directory ${pathToChangeTo} not found`)
+        }
       }
     }
   }
 
   function commandClearScreen(args) {
-    console.log("clear the screen");
+    var lines = document.getElementsByClassName('terminal-line');
+    // Iterate in reverse, skipping the bottom line as this contains the command
+    for (var i = lines.length - 2; i >= 0; i--) {
+      lines[i].remove();
+    }
   }
 
   function commandHelp(args) {
