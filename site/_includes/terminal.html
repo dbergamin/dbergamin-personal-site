@@ -10,15 +10,11 @@
     <div id="terminal-output-template" style="display: none">
       <span class="terminal-output"></span>
     </div>
-    <div class="terminal-line">
-      <span class="terminal-prompt">guest@danielbergamin.net:~ $ </span>
-      <span class="terminal-command">cd public/</span>
-    </div>
-    <div class="terminal-line">
+    <div class="terminal-line terminal-line-example">
       <span class="terminal-prompt">guest@danielbergamin.net:~/public $ </span>
       <span class="terminal-command">ls</span>
     </div>
-    <div class="terminal-line">
+    <div class="terminal-line terminal-line-example">
       <span class="terminal-output">
         <span><a href="{% link blog.markdown %}">[ blog/ ]</a></span>
         <span><a href="{% link about.markdown %}">[ about.html ]</a></span>
@@ -85,6 +81,18 @@
       var arr = new Uint8Array((len || 40) / 2)
       window.crypto.getRandomValues(arr)
       return Array.from(arr, DanUtils.dec2hex).join('')
+    }
+
+    static getNestedObject(object, path) {
+      return path.reduce((obj, key) =>
+        (obj && obj[key] !== 'undefined') ? obj[key] : undefined, object);
+    }
+
+    /**
+     * Thanks underscorejs for this one
+     **/
+    static isUndefined = function(obj) {
+      return obj === void 0;
     }
   }
 
@@ -189,18 +197,20 @@
       this.lines.forEach(line => line.remove());
     }
 
+    // This is attached to the active command input and generally runs in that context 
     evaluateInput(event) {
-      var self = this;
       var matchedCommand = false;
 
       if (event.keyCode === KEYPRESS_RETURN) {
         var input = this.value.toLowerCase();
         TERMINAL_COMMAND_HISTORY_POSITION = NO_COMMAND_HISTORY_CYCLED;
-
+        
+        // Record the user input
+        TERMINAL_INTERFACE.recordCommand();
+        
+        //Process the input
         Object.keys(TERMINAL_COMMANDS).forEach(function(command_id) {
           if (input.match(TERMINAL_COMMANDS[command_id].regex)) {
-            // Record the user input
-            self.recordCommand();
 
             // If input matches a command definition, invoke the command with the raw input string
             var userCommandArgs;
@@ -221,7 +231,7 @@
 
         // Reset the active command prompt and scroll it to the bottom
         TERMINAL_ACTIVE_COMMAND_LINE.getElementsByClassName('terminal-command')[0].value = '';
-        TERMINAL_ACTIVE_COMMAND_LINE.getElementsByClassName('terminal-prompt')[0].innerText = self.getPrompt();
+        TERMINAL_ACTIVE_COMMAND_LINE.getElementsByClassName('terminal-prompt')[0].innerText = TERMINAL_INTERFACE.getPrompt();
         TERMINAL_ACTIVE_COMMAND.dispatchEvent(new Event('input'));
         TERMINAL_BODY.scrollTop = TERMINAL_BODY.scrollHeight;
       } else if (event.keyCode === KEYPRESS_UP) {
@@ -240,8 +250,9 @@
       }
     }
 
-    addNewLine() {
-      var newLine = new TerminalLine(TerminalLineType.OUTPUT);
+    // Type is a TerminalLineType
+    addNewLine(terminalLineType) {
+      var newLine = new TerminalLine(terminalLineType);
       this.lines.push(newLine);
       TERMINAL_BODY.insertBefore(newLine.element, TERMINAL_ACTIVE_COMMAND_LINE);
       return newLine;
@@ -249,7 +260,7 @@
 
     // Prints files to terminal output
     printFiles(files) {
-      var newLine = this.addNewLine();
+      var newLine = this.addNewLine(TerminalLineType.OUTPUT);
       Object.keys(files).forEach(function(filename){
         // Check if the raw object is an object or a string to check if it is a file or directory
         var fsObject = new TerminalFsObject(filename, files[filename], files[filename] instanceof Object);
@@ -259,17 +270,12 @@
     }
 
     printText(text) {
-      var newLine = this.addNewLine();
+      var newLine = this.addNewLine(TerminalLineType.OUTPUT);
       newLine.setOutputText(text);
       newLine.show();
     }
 
-    /*
-     * Records the current command and prepare the terminal for the next command
-     * 1. Create a new terminal line object with values based on the command entered
-     * 2. Drop it into place in the 'shell' on the penultimate line
-     * 3. Clean up the active command line so the user can type a new command
-     */
+    // Records the current entered command
     recordCommand() {
       // Grab the final line of the terminal; containing the active command and store the command text
       var commandText = TERMINAL_ACTIVE_COMMAND_LINE.getElementsByClassName('terminal-command')[0].value;
@@ -279,14 +285,14 @@
       TERMINAL_COMMAND_HISTORY.push(commandText);
       
       // Add the recorded command to the terminal
-      var newLine = this.addNewLine();
+      var newLine = this.addNewLine(TerminalLineType.COMMAND);
       newLine.setCommandText(commandText);
       newLine.setPromptText(promptText);
       newLine.show();
     }
 
     getPrompt() {
-      return `guest@danielbergamin.net:${TERMINAL_ACTIVE_DIR} $`;
+      return `guest@danielbergamin.net:${TERMINAL_FILESYSTEM.ACTIVE_DIR} $`;
     }
   }
   
@@ -314,17 +320,29 @@
 
   class TerminalFilesystemPath {
     constructor(pathString) {
+      var result;
       if (pathString == '/') {
-        this.path = new Array(['~']);
-      }
-       
-      // Transform relative paths to absolute
-      if (!TerminalFilesystemPath.isAbsolutePath(pathString)) {
-        pathString = TERMINAL_ACTIVE_DIR.concat("/",pathString);
-      }
+        result = new Array(['~']);
+      } else {
+        // Construct our array and then conditionally 'decorate' the result before storing it
+        result = pathString.split('/');
 
-      // Construct our array
-      this.path = pathString.split('/');
+        // Transform relative paths to absolute
+        if (!TerminalFilesystemPath.isAbsolutePath(pathString)) {
+          result = TERMINAL_FILESYSTEM.ACTIVE_DIR.path.concat(result);
+        }
+
+        // Process metacharacters
+        this.path = result.filter(function(value, index, arr){
+          // If a '..' is encountered, remove it along with the adjacant dir to 'go up one level'  
+          if (value != ".." && arr[index + 1] != "..") {
+            // A '.' can be ignored
+            if (value != '.') { 
+              return value;
+            }
+          }
+        });
+      }
     }
 
     toString() {
@@ -338,6 +356,7 @@
 
   class TerminalFilesystem {
     constructor() {
+      // Filesystem holds the available files as keys, and a link to their page on the site as values
       this.filesystem = {
         "~": {
           ".": NOT_VIEWABLE,
@@ -351,40 +370,51 @@
           }
         }
       };
+      this.ACTIVE_DIR = new TerminalFilesystemPath("~");
     }
 
-    getFiles(dir) {
-      console.log("Seeking fliles for " + dir);
-      var i = 0;
-      var files = this.filesystem;
-      while (i < dir.path.length) {
-        files = files[dir.path[i]];
-        i = i + 1;
+    changeDir(path) {
+      try {
+        if (this.isDirectory(this.isValidPath(path))) {
+          this.ACTIVE_DIR = path;
+        } else {
+          throw(`Path ${path} is a file or special object, cannot change dir`);
+        }
+      } catch (e) {
+        throw(e);
       }
-      return files;
+    }
+
+    listDirectory(dir) {
+      try {
+        return this.isValidPath(dir);
+      } catch (e) {
+        throw(e);
+      }
+    }
+
+    isDirectory(path) {
+      return (path instanceof Object);
     }
 
     // Check if a path exists
-    isValidFilePath(path) {
-      if (!(path instanceof TerminalFilesystemPath)) {
-        leaveMeAlone();
-        return false;
+    isValidPath(fsPath) {
+      if (!(fsPath instanceof TerminalFilesystemPath)) {
+        throw(`Something has gone wrong.`);
       }
 
-      var i = 0;
-      var seekDir = this.filesystem;
-      while (i < path.length && seekDir != undefined) {
-        seekDir = seekDir[splitPath[i]];
-        i = i + 1;
+      var result = DanUtils.getNestedObject(this.filesystem,fsPath.path);
+      if (DanUtils.isUndefined(result)) {
+        throw(`Directory ${fsPath} not found`);
+      } else {
+        return result;
       }
-      return (seekDir != undefined)
     }
-
   }
 
   var TERMINAL_INTERFACE = new TerminalInterface();
   var TERMINAL_FILESYSTEM = new TerminalFilesystem();
-  var TERMINAL_ACTIVE_DIR = new TerminalFilesystemPath("~/public");
+  TERMINAL_FILESYSTEM.changeDir(new TerminalFilesystemPath("~/public"));
 
   /*******************************************************************************
    * Command implementations
@@ -393,27 +423,15 @@
    *         e.g. the command "print hello 123" would pass "hello 123" in as args.
    *******************************************************************************/
 
-  // A lot of the hacky logic in here should be moved into a mini class handling terminal FS state
-  // But perfect being the enemy of done, here we are...
   function commandChangeDir(args) {
     var pathToChangeTo = args;
     if (pathToChangeTo.split(' ').length != 1 || pathToChangeTo === NO_ARGS) {
-      printText('Usage: cd [DIRECTORY_PATH]');
+      TERMINAL_INTERFACE.printText('Usage: cd [DIRECTORY_PATH]');
     } else {
-      if (pathToChangeTo == "..") {
-        if (TERMINAL_ACTIVE_DIR.length > 1) {
-          TERMINAL_ACTIVE_DIR.pop();
-        }
-      } else {
-        // Transform relative paths into absolute
-        if (!isAbsoluteFilePath(pathToChangeTo)) {
-          pathToChangeTo = TERMINAL_ACTIVE_DIR.concat("/",pathToChangeTo);
-        }
-        if (isValidFilePath(pathToChangeTo)) {
-          TERMINAL_ACTIVE_DIR = getPathFromString(pathToChangeTo);
-        } else {
-          printText(`cd: directory ${pathToChangeTo} not found`)
-        }
+      try {
+        TERMINAL_FILESYSTEM.changeDir(new TerminalFilesystemPath(pathToChangeTo));
+      } catch (e) {
+        TERMINAL_INTERFACE.printText(e);
       }
     }
   }
@@ -429,21 +447,20 @@
   }
 
   function commandListDir(args) {
-    var files = TERMINAL_FILESYSTEM.getFiles(TERMINAL_ACTIVE_DIR);
+    var files = TERMINAL_FILESYSTEM.listDirectory(TERMINAL_FILESYSTEM.ACTIVE_DIR);
     TERMINAL_INTERFACE.printFiles(files);
   }
 
   // Display an error if the command is not found.
   function commandNotFound(args) {
-    alert("command " + args + " not found. Use `help` for more info.");
+    TERMINAL_INTERFACE.printText(`command ${args} not found. Use 'help' for supported commands.`);
   }
-
 
   function commandPrint(args) {
     TERMINAL_INTERFACE.printText(args);
   }
 
-  // Generic error behaviour
+  // Lo-fi error handling when something unexpected happens
   function leaveMeAlone() {
     alert("Please don't try to break my fragile imitation of a shell, no bug bounties to be found here.");
   }

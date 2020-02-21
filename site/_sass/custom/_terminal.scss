@@ -1,6 +1,6 @@
 // Colours
 $terminal-background: #000;
-
+$terminal-line-highlight: rgba(3, 50, 15, 0.6);
 // Sizes
 $terminal-header-height: 30px;
 $terminal-header-roundness-radius: 10px;
@@ -45,6 +45,10 @@ $terminal-header-roundness-radius: 10px;
 .terminal-line {
   line-height: 1.2;
   color: $grey-color-light;
+}
+
+.terminal-line-example {
+  background: $terminal-line-highlight;
 }
 
 .terminal-prompt {
