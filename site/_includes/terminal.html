@@ -16,7 +16,7 @@
     </div>
     <div class="terminal-line terminal-line-example">
       <span class="terminal-output">
-        <span><a href="{% link blog.markdown %}">[ blog/ ]</a></span>
+        <span><a href="{% link blog.markdown %}">[ blog ]</a></span>
         <span><a href="{% link about.markdown %}">[ about.html ]</a></span>
         <span><a href="{% link cv.markdown %}">[ cv.html ]</a></span>
       </span>
@@ -43,7 +43,7 @@
 
   // Globals holding the 'terminal' state
   // It would be great if JS supported more appropriate data types, but I'd rather slog through
-  // with objects and arrays than add a dependency for a very limited problem.
+  // than add a dependency for a very limited problem.
   var TERMINAL_BODY = document.querySelector('#terminal-body');
   var TERMINAL_ACTIVE_COMMAND_LINE = TERMINAL_BODY.lastElementChild;
   var TERMINAL_ACTIVE_COMMAND = document.querySelector('#active-terminal-command'); 
