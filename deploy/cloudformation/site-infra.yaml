@@ -1,10 +1,11 @@
 AWSTemplateFormatVersion: "2010-09-09"
-
 Parameters:
 
   HostedZoneId:
     Type: AWS::Route53::HostedZone::Id
   DomainName:
+    Type: String
+  CertificateArn:
     Type: String
 
 Resources:
@@ -39,17 +40,6 @@ Resources:
               AWS:
                 Fn::Sub: "arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ${WebsiteCloudFrontOAI}"
 
-  WebsiteCertificate:
-    Type: AWS::CertificateManager::Certificate
-    Properties:
-      DomainName:
-        Ref: DomainName
-      ValidationMethod: DNS
-      Tags:
-        - Key: HostedZoneId
-          Value:
-            Ref: HostedZoneId
-
   WebsiteCDN:
     Type: AWS::CloudFront::Distribution
     Properties:
@@ -80,7 +70,7 @@ Resources:
         PriceClass: PriceClass_100
         ViewerCertificate:
           AcmCertificateArn:
-            Ref: WebsiteCertificate
+            Ref: CertificateArn
           SslSupportMethod: sni-only
           MinimumProtocolVersion: TLSv1.2_2018
 

@@ -1,7 +1,6 @@
 AWSTemplateFormatVersion: 2010-09-09
 
 Parameters:
-
   RepositoryOwner:
     Type: String
     Description: The owner of the GitHub repository.
@@ -40,7 +39,6 @@ Metadata:
         default: Stack Name
 
 Resources:
-
   CodePipeline:
     Type: AWS::CodePipeline::Pipeline
     Properties:
@@ -149,7 +147,7 @@ Resources:
   CloudFrontDistributionInvalidationFunction:
     Type: AWS::Lambda::Function
     Properties:
-      Runtime: nodejs8.10
+      Runtime: nodejs12.x
       Handler: index.handler
       Timeout: 5
       Role:
@@ -158,13 +156,13 @@ Resources:
         ZipFile:
           Fn::Join:
             - "\n"
-            - - "const aws = require('aws-sdk');"
+            - - "const AWS = require('aws-sdk');"
               - ""
               - "const DistributionId = process.env.DISTRIBUTION_ID;"
               - ""
               - "exports.handler = async (event) => {"
-              - "  const codepipeline = new aws.CodePipeline();"
-              - "  const cloudfront = new aws.CloudFront();"
+              - "  const codepipeline = new AWS.CodePipeline();"
+              - "  const cloudfront = new AWS.CloudFront();"
               - "  "
               - "  const jobId = event['CodePipeline.job'].id;"
               - "  "
