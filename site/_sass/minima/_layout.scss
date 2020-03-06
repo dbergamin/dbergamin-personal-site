@@ -20,9 +20,18 @@
 .default-container > .page-content {
   grid-area: content;
   justify-self: center;
-  width: 70%;
+
   min-width: $content-min-width;
-  padding: 30px;
+  @media (max-width: $laptop-size) {
+    padding: 10px;
+    width: 95%;
+  }
+  
+  @media (min-width: $laptop-size) {
+    padding: 30px;
+    width: 70%;
+  }
+
   z-index: 1;
 }
 
