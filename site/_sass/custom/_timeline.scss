@@ -73,6 +73,13 @@ $font-text: sans-serif;
   }
 }
 
+.timeline-subentry {
+  transform: scale(0.8);
+  &:after {
+    display: none;
+  }
+}
+
 .current-position {
   &:before {
     color: black;
