@@ -62,9 +62,10 @@
   var TERMINAL_COMMANDS = [
     new TerminalCommand('cd', '^cd(.*)?', commandChangeDir, "Changes the current directory"),
     new TerminalCommand('clear', '^(clear|cls)(.*)?', commandClearScreen, "Clears the terminal contents"),
+    new TerminalCommand('echo', '^echo(.*)?', commandEcho, "Print some text to the terminal output"),
     new TerminalCommand('help', '^help(.*)?', commandHelp, "Print help information"),
-    new TerminalCommand('ls', '^ls(.*)?', commandListDir, "Show clickable links to contents of current directory"),
-    new TerminalCommand('print', '^print(.*)?', commandPrint, "Print some text to the terminal output")
+    new TerminalCommand('ls', '^ls(.*)?', commandListDir, "Show clickable links to contents of current directory")
+
   ];
 
   class DanUtils {
@@ -456,7 +457,7 @@
     TERMINAL_INTERFACE.printText(`command ${args} not found. Use 'help' for supported commands.`);
   }
 
-  function commandPrint(args) {
+  function commandEcho(args) {
     TERMINAL_INTERFACE.printText(args);
   }
 

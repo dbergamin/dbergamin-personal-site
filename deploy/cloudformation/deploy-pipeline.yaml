@@ -136,6 +136,7 @@ Resources:
               - "      ruby: 2.6\n"
               - "    commands:\n"
               - "      - cd site\n"
+              - "      - gem install bundler -v 2.0.2\n"
               - "      - bundle install\n"
               - "  build:\n"
               - "    commands:\n"
