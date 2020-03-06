@@ -87,16 +87,25 @@
   padding-top: $spacing-unit / 2;
   border-top: $grey-color solid 1px;
 
+  @media (max-width: $laptop-size) {
+    flex-flow: column;
+  }
+  
   &:before {
     display: inherit;
-    align-items: center;
     content: attr(contract-position-title);
-    max-width: 110px;
-    min-width: 110px;
     text-align: left;
     text-transform: uppercase;
     color: $grey-color;
     font-weight: bold;
+
+    // On the laptop, this will display to the left and requires some wrapping
+    // On mobile, it sits above (due to flex-flow: column), so this isn't needed
+    @media (min-width: $laptop-size) {
+      align-items: center;
+      max-width: 110px;
+      min-width: 110px;
+    }
   }
 
   > ul > li {

@@ -18,21 +18,20 @@
 }
 
 .default-container > .page-content {
+  min-width: $content-min-width;
   grid-area: content;
   justify-self: center;
+  z-index: 1;
 
-  min-width: $content-min-width;
   @media (max-width: $laptop-size) {
     padding: 10px;
-    width: 95%;
+    max-width: 100%;
   }
   
   @media (min-width: $laptop-size) {
     padding: 30px;
     width: 70%;
   }
-
-  z-index: 1;
 }
 
 .default-container > .site-footer {
