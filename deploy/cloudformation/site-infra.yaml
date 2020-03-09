@@ -7,6 +7,8 @@ Parameters:
     Type: String
   CertificateArn:
     Type: String
+  Nonce:
+    Type: String
 
 Resources:
 
@@ -67,6 +69,9 @@ Resources:
             QueryString: false
           Compress: true
           ViewerProtocolPolicy: redirect-to-https
+          LambdaFunctionAssociations:
+          - EventType: viewer-request
+            LambdaFunctionARN: !GetAtt IndexLambdaVersion.FunctionArn
         PriceClass: PriceClass_100
         ViewerCertificate:
           AcmCertificateArn:
@@ -93,6 +98,106 @@ Resources:
         HostedZoneId: Z2FDTNDATAQYW2
         DNSName:
           Fn::GetAtt: WebsiteCDN.DomainName
+
+  DefaultIndexFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Runtime: nodejs12.x
+      Handler: index.handler
+      Timeout: 5
+      Role:
+        Fn::Sub: "arn:aws:iam::${AWS::AccountId}:role/${DefaultIndexFunctionRole}"
+      Code:
+        ZipFile: |
+          // Sourced from https://aws.amazon.com/blogs/compute/implementing-default-directory-indexes-in-amazon-s3-backed-amazon-cloudfront-origins-using-lambdaedge/
+          exports.handler = (event, context, callback) => {
+            // Extract the request from the CloudFront event that is sent to Lambda@Edge
+            var request = event.Records[0].cf.request;
+
+            // Extract the URI from the request
+            var olduri = request.uri;
+            
+            // Match any '/' that occurs at the end of a URI. Replace it with a default index
+            var newuri = olduri.replace(/\/$/, '\/index.html');
+
+            // Log the URI as received by CloudFront and the new URI to be used to fetch from origin
+            console.log("Old URI: " + olduri);
+            console.log("New URI: " + newuri);
+
+            // Replace the received URI with the URI that includes the index page
+            request.uri = newuri;
+
+            // Return to CloudFront
+            return callback(null, request);
+          }
+
+  DefaultIndexFunctionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+                - edgelambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+
+  IndexLambdaVersion:
+    Type: Custom::LatestLambdaVersion
+    Properties:
+      ServiceToken: !GetAtt PublishLambdaVersion.Arn
+      FunctionName: !Ref DefaultIndexFunction
+      Nonce: !Ref Nonce
+
+  # Custom resource for getting latest version of a lambda,
+  # as required by CloudFront.
+
+  PublishLambdaVersion:
+    Type: AWS::Lambda::Function
+    Properties:
+      Handler: index.handler
+      Runtime: nodejs12.x
+      Role: !GetAtt PublishLambdaVersionRole.Arn
+      Code:
+        ZipFile: |
+          const {Lambda} = require('aws-sdk')
+          const {send, SUCCESS, FAILED} = require('cfn-response')
+          const lambda = new Lambda()
+          exports.handler = (event, context) => {
+            const {RequestType, ResourceProperties: {FunctionName}} = event
+            if (RequestType == 'Delete') return send(event, context, SUCCESS)
+            lambda.publishVersion({FunctionName}, (err, {FunctionArn}) => {
+              err
+                ? send(event, context, FAILED, err)
+                : send(event, context, SUCCESS, {FunctionArn})
+            })
+          }
+
+  PublishLambdaVersionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service: lambda.amazonaws.com
+          Action: sts:AssumeRole
+      ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+      - PolicyName: PublishVersion
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action: lambda:PublishVersion
+            Resource: '*'
 
 Outputs:
 

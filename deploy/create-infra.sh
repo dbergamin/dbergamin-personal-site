@@ -15,9 +15,11 @@ if ! aws cloudformation describe-stacks --region $REGION --stack-name $STACK_NAM
 	echo -e "\nStack does not exist, creating ..."
 	aws cloudformation create-stack --stack-name $STACK_NAME \
                                 	--template-body file://cloudformation/site-infra.yaml  \
+                                	--capabilities CAPABILITY_IAM \
                                 	--parameters ParameterKey=HostedZoneId,ParameterValue=$HOSTED_ZONE_ID \
                                              	ParameterKey=DomainName,ParameterValue=$DOMAIN_NAME \
                                              	ParameterKey=CertificateArn,ParameterValue=$CERTIFICATE_ARN \
+                         	                 	ParameterKey=Nonce,ParameterValue=$RANDOM \
                                 	--region $REGION
 	echo "Waiting for stack to be created ..."
 	aws cloudformation wait stack-create-complete \
@@ -29,9 +31,11 @@ else
 	  update_output=$( aws cloudformation update-stack \
 	    --stack-name $STACK_NAME \
     	--template-body file://cloudformation/site-infra.yaml  \
+    	--capabilities CAPABILITY_IAM \
     	--parameters ParameterKey=HostedZoneId,ParameterValue=$HOSTED_ZONE_ID \
   	               	ParameterKey=DomainName,ParameterValue=$DOMAIN_NAME \
                  	ParameterKey=CertificateArn,ParameterValue=$CERTIFICATE_ARN \
+                 	ParameterKey=Nonce,ParameterValue=$RANDOM \
     	--region eu-west-1 2>&1)
 	  status=$?
   	set -e
