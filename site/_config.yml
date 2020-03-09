@@ -1,8 +1,6 @@
 title: Daniel Bergamin
 email: daniel@bergam.in
-description: >- # ignore newlines until "baseurl:"
-  You're visiting the personal site of <a href="/cv.html">Daniel Bergamin</a>. I'm interested in the people, technologies 
-  and systems that underpin the modern web and like to <a href="/blog/">write about them</a> sometimes.
+description: Personal site
 baseurl: ""
 url: "https://danielbergamin.net" # the base hostname & protocol for your site, e.g. http://example.com
 github_username: dbergamin
