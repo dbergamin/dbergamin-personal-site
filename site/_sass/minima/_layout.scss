@@ -30,7 +30,7 @@
   
   @media (min-width: $laptop-size) {
     padding: 30px;
-    width: 70%;
+    width: 55%;
   }
 }
 
@@ -88,6 +88,14 @@
 
 .page-heading {
   @include relative-font-size(2);
+}
+
+.post {
+  @media (min-width: $laptop-size) {
+    padding-left: 8%;
+    padding-right: 8%;
+  }
+  text-align: justify;
 }
 
 .post-list-heading {
@@ -155,5 +163,25 @@
     @include media-query($on-laptop) {
       @include relative-font-size(1.125);
     }
+  }
+
+  hr {
+    overflow: visible; /* For IE */
+    padding: 0;
+    border: none;
+    border-top: medium double #333;
+    color: #333;
+    text-align: center;
+    margin-top: 1.6em;
+  }
+
+  hr:after {
+      content: "§";
+      display: inline-block;
+      position: relative;
+      top: -0.7em;
+      font-size: 1.5em;
+      padding: 0 0.25em;
+      background: white;
   }
 }

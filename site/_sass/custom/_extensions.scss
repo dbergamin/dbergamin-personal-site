@@ -1,0 +1,17 @@
+// Used for post unconscious bias
+// Horizontal gallery showing up to 5 images
+.horizontal-gallery-5 {
+  display: flex;
+  flex-flow: row;
+  margin-bottom: $spacing-unit;
+
+  img {
+    max-width: 18%;
+    max-height: 150px;
+    padding: 1%;
+  
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+  }
+}
