@@ -25,12 +25,14 @@
 
   @media (max-width: $laptop-size) {
     padding: 10px;
-    max-width: 100%;
+    max-width: 560px;
+    width: calc(100% - 20px);
   }
   
   @media (min-width: $laptop-size) {
     padding: 30px;
-    width: 55%;
+    max-width: 960px;
+    width: 70%;
   }
 }
 

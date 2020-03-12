@@ -20,6 +20,7 @@ $font-text: sans-serif;
 #timeline-content {
   margin-top: $spacing + $base-font-size;
   text-align: center;
+  height: 80%
 }
 
 .timeline {
@@ -33,10 +34,10 @@ $font-text: sans-serif;
   max-width: 30%;
 }
 
-.timeline-date {
+.timeline-entry {
   padding-bottom: ($spacing * 0.5);
   padding-top: ($spacing * 0.5);
-  margin-bottom: $spacing;
+  margin-bottom: $spacing * 2;
   position: relative;
 
   &:last-of-type {
@@ -74,9 +75,14 @@ $font-text: sans-serif;
 }
 
 .timeline-subentry {
+  @extend .timeline-entry;
   transform: scale(0.8);
+
   &:after {
-    display: none;
+    content: "<";
+    background: none;
+    color: $highlight-color;
+    right: (($spacing + $line) * 1.25 + ($dot * 0.35)) * -1;
   }
 }
 
