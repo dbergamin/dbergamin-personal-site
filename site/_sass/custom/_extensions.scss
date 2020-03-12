@@ -15,3 +15,16 @@
     background-size: cover;
   }
 }
+
+
+// Custom widget linking back to blog
+// Plonked at the top of posts
+.back-to-blog {
+  border: 2px solid $grey-color-light;
+  border-radius: 6px;
+  padding:3px;
+
+  a {
+    color: $grey-color;
+  }
+}
