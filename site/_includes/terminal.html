@@ -314,7 +314,11 @@
     // Renders HTML for output onto the terminal
     renderToHtml() {
       var fileOutput = document.createElement('span');
-      fileOutput.innerHTML = `<a href='${this.weblink}'>[ ${this.name} ]</a> `;
+      if (this.weblink != NOT_VIEWABLE) {
+        fileOutput.innerHTML = `<a href='${this.weblink}'>[ ${this.name} ]</a> `;
+      } else {
+        fileOutput.innerHTML = `<a href="javascript:TERMINAL_ACTIVE_COMMAND.value='cd ${this.name}';TERMINAL_ACTIVE_COMMAND.dispatchEvent(new Event('input'));">[ ${this.name} ]</a>`;
+      }
       return fileOutput;
     }
   }
@@ -365,7 +369,17 @@
           "public": {
             ".": "/",
             "blog": {
-              ".": "/blog.html"
+              ".": "/blog.html",
+              "personal": {
+                ".": NOT_VIEWABLE,
+                "2020-02-06-about-this-site.html": "/personal/2020/02/06/about-this-site.html",
+                "2020-03-08-unconscious-bias.html": "/personal/2020/03/08/unconscious-bias.html",
+                "2020-03-22-gratitude.html": "/personal/2020/03/23/gratitude.html"
+              },
+              "tech": {
+                ".": NOT_VIEWABLE,
+                "2020-03-17-jackhammers-and-shovels.html": "/tech/2020/03/17/jackhammers-and-shovels.html"
+              }
             },
             "about.html": "/about.html",
             "cv.html": "/cv.html"
