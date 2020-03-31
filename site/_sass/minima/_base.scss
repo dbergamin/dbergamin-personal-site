@@ -131,6 +131,8 @@ a {
   }
 }
 
+
+
 /* 
  * External links
  * Thanks DerZyklop: https://stackoverflow.com/a/25410621
@@ -147,8 +149,14 @@ a[href*="//"]:not([href*="danielbergamin.net"]):not([href*="danielbergamin.local
   }
 }
 
-// Mailto
+
+
+/* 
+ * Mailto links
+ */
 a[href^="mailto"]:hover:after { content: " > " attr(address); }
+
+
 
 /**
  * Blockquotes
@@ -167,6 +175,7 @@ blockquote {
 }
 
 
+
 /**
  * Emphasis panel for highlight text
  */
@@ -178,6 +187,21 @@ blockquote.emphasis-panel {
   letter-spacing: normal;
   padding: 10px;
 }
+
+blockquote.trailing-image > :last-child {
+  text-align: center;
+
+  > img {
+    filter: drop-shadow(2px 4px 6px #000);
+    width: 66%;
+  }
+}
+
+blockquote.light-emphasis-panel {
+  @extend blockquote.emphasis-panel;
+  background-color: #eef;
+}
+
 
 
 /**
@@ -317,4 +341,14 @@ table {
 
 .indent-3 {
   margin-left: $spacing-unit * 3;
+}
+
+
+
+/**
+ * Underlined content
+ */
+
+.underline {
+  border-bottom: 1px solid black;
 }

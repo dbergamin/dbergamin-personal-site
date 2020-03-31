@@ -2,6 +2,7 @@
 layout: post
 author: Daniel Bergamin
 title:  "Digital footprints [1/2] - public presence"
+series: digital-footprints
 date:   2020-03-26 13:00:33 +0000
 categories: tech
 ---
