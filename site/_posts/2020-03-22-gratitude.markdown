@@ -1,6 +1,7 @@
 ---
 layout: post
 author: Daniel Bergamin
+author_url: /about.html
 title:  "Gratitude in the time of COVID-19"
 date:   2020-03-23 20:12:39 +0000
 categories: personal

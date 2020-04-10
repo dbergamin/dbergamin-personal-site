@@ -1,6 +1,7 @@
 ---
 layout: post
 author: Daniel Bergamin
+author_url: /about.html
 title:  "Getting started"
 date:   2020-02-06 15:55:10 +0000
 categories:  personal

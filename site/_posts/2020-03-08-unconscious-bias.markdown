@@ -1,6 +1,7 @@
 ---
 layout: post
 author: Daniel Bergamin
+author_url: /about.html
 title:  "Unconscious Bias"
 date:   2020-03-08 22:40:10 +0000
 categories:  personal

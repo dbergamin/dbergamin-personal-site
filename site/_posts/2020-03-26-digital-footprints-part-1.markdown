@@ -1,6 +1,7 @@
 ---
 layout: post
 author: Daniel Bergamin
+author_url: /about.html
 title:  "Digital footprints [1/2] - public presence"
 series: digital-footprints
 part:   1

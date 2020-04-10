@@ -1,6 +1,7 @@
 ---
 layout: post
 author: Daniel Bergamin
+author_url: /about.html
 title:  "Things that spark joy [1]"
 series: things-that-spark-joy
 part:   1

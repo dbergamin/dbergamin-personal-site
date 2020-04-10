@@ -1,6 +1,7 @@
 ---
 layout: post
 author: Daniel Bergamin
+author_url: /about.html
 title:  "My email setup: Design [1/3]"
 series: my-email-setup
 part:   1

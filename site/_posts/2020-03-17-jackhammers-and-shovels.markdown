@@ -1,6 +1,7 @@
 ---
 layout: post
 author: Daniel Bergamin
+author_url: /about.html
 title:  "Jackhammers and Shovels"
 date:   2020-03-17 22:31:10 +0000
 categories:  tech
