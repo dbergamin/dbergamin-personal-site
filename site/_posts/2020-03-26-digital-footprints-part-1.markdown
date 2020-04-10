@@ -3,6 +3,7 @@ layout: post
 author: Daniel Bergamin
 title:  "Digital footprints [1/2] - public presence"
 series: digital-footprints
+part:   1
 date:   2020-03-26 13:00:33 +0000
 categories: tech
 ---
@@ -79,10 +80,11 @@ Note that while I took a tech-centric approach to the setup, something like [Squ
 #### Reducing email dependence
 
 I had a few motivations to get my email away from being totally dependant on Gmail:
-* Reading accounts of people that got locked out of their accounts for spurious or completely false reasons, and had a hard time getting back in. I want a backup plan if this happens.
-* Not participating in the current mail oligopoly. While setting up new outbound mailing systems for an employer, I found the anti-spam measures employed by the big players (e.g. Microsoft with O365, live.com and Hotmail, and Google with Gmail) to be extremely opaque and devoid of any regulatory accountability. Even with properly configured SPF/DKIM and using clean IP's (not on any public blacklist I could find), messages were being classified as spam, and the limited anti-spam decision making info in the mail headers did not explain why. While I love the spam filtering nous of these free services as a user, being stuck on the other side in this situation was an eye-opener to dangers of centralising email.
+* Reading accounts of people that got locked out of their accounts for spurious false reasons, and had a hard time getting back in. I need a backup plan if this happens.
+* Not participating in the current mail oligopoly. While setting up new outbound mailing systems for an employer, I found the anti-spam measures employed by the big players to be extremely opaque and devoid of any regulatory accountability. Even with properly configured SPF/DKIM and using clean IP's (not on any public blacklist I could find), messages were being classified as spam, and the limited anti-spam decision making info in the mail headers did not explain why. 
+* While I love the spam filtering nous of these free services as a user, being stuck on the other side in this situation was an eye-opener to dangers of email becoming extremely centralised. You shouldn't need to have a Google or Microsoft account to be able to mail their users reliably, and the more we centralise on these providers, the closer we get to this reality.
 
-What to do about it involved a bit of consideration. Popular alternatives [Fastmail][fastmail] and [Protonmail][prontonmail] looked appealing, but I ended up going with something a bit custom using [Amazon SES][amazon-ses], which won for me on price, flexibility, and ability to get my hands a little bit dirty whilst abstracting away the more mundane tasks involved with running a mail server. I do plan to share the technical setup in more detail in a future post.
+What to do about it involved a bit of consideration. Popular alternatives [Fastmail][fastmail] and [Protonmail][prontonmail] looked appealing, but I ended up going with something a bit custom using [Amazon SES][amazon-ses], which won for me on price, flexibility, and ability to get my hands a little bit dirty whilst abstracting away the more mundane tasks involved with running a mail server. If you're still curious and might want to do something similar, I've put together a [more detailed technical walkthrough here]({% post_url 2020-04-10-my-email-setup-part-1 %}).
 
 With fresh custom emails (primary: daniel@bergam.in, backup daniel@danielbergamin.net) backed by SES, I've gained the following:
 * Separation between domain and the email operator. If I ever want to move away from AWS SES, I can move to another email provider without losing the email address, saving the headache of updating a lot of sites and losing a trusted identity.

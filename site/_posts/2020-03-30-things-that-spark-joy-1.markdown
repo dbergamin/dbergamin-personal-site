@@ -3,6 +3,7 @@ layout: post
 author: Daniel Bergamin
 title:  "Things that spark joy [1]"
 series: things-that-spark-joy
+part:   1
 date:   2020-03-30 16:22:55 +0100
 categories: personal
 ---
