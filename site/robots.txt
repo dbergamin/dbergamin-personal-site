@@ -1,0 +1,8 @@
+---
+layout: none
+---
+
+User-Agent: *
+Disallow: /private/danielbergamin.key
+
+Sitemap: {{ site.url }}/sitemap.xml

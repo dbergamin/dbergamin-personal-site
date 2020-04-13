@@ -67,10 +67,10 @@
         <p class="cv-item-role">Our customers include:</p>
         <div class="cv-item-role cv-item-contract" contract-position-title="WorldFirst">
           <ul>
-            <li>Aug 2018 — Jan 2019: Hands-on promotion of the DevOps way within the infrastructure team.</li>
-            <li>Jan 2019 — Jul 2019: Migrate all client production services from inhouse datacentre environment to public cloud.</li>
-            <li>Sep 2019 — Nov 2019: Update IT DR/BCP processes for cloud infrastructure; conduct full DR test to recertify all services.</li>
-            <li>Nov 2019 — Dec 2019: Rearchitect and migrate some services to new managed Kubernetes cluster - the next gen platform.</li> 
+            <li>Aug 2018 &mdash; Jan 2019: Hands-on promotion of the DevOps way within the infrastructure team.</li>
+            <li>Jan 2019 &mdash; Jul 2019: Migrate all client production services from inhouse datacentre environment to public cloud.</li>
+            <li>Sep 2019 &mdash; Nov 2019: Update IT DR/BCP processes for cloud infrastructure; conduct full DR test to recertify all services.</li>
+            <li>Nov 2019 &mdash; Dec 2019: Rearchitect and migrate some services to new managed Kubernetes cluster - the next gen platform.</li> 
             <li>More details here: <span class="cv-link-worldfirst-devops cv-link">WorldFirst</span>.</li>
           </ul>
         </div>
@@ -115,7 +115,7 @@
         <p class="cv-item-role">I worked on the transportnsw.info delivery team for just over two years, wearing many hats in the process:</p>
         <ul>
           <li>As a devops engineer in the cross functional developer productivity and cloud team, I worked on continuous delivery enablers, aiming to safely ship releases after each sprint with high confidence.</li>
-          <li>As an cloud engineer, I used a combination of CloudFormation (DSL), Docker, Jenkins, Ansible & Ruby to maintain infrastructure in code as a deployable artifact.</li>
+          <li>As an cloud engineer, I used a combination of CloudFormation (DSL), Docker, Jenkins, Ansible &amp; Ruby to maintain infrastructure in code as a deployable artifact.</li>
           <li>As a developer, I used AWS Lambda and the Serverless framework to build new microservices (NodeJS) supporting new features on the <a href="https://transportnsw.info" target="_blank">transportnsw.info</a> website.</li>
           <li>As a SME in Atlassian productivity tools, I advise on and implemented custom solutions across the Transport cluster that utilise Atlassian applications (JIRA, Confluence, Bitbucket) as a platform.</li>
         </ul>
@@ -136,61 +136,62 @@
         <p class="cv-item-role">I started out as a part time support engineer whilst pursuing my degree, moving onto a junior developer and finally a consultant position with ServiceRocket. The consultant position involved:</p>
         <ul>
           <li>Business process consulting: assist clients with workflow, reporting and structure on Atlassian JIRA and Confluence.</li>
-          <li>DevOps consulting: usage of JIRA, Stash and Bamboo & git. Help organisations adopt CI/CD, and develop custom plugins (Java, OSGi bundles) to integrate with inhouse tools.</li>
+          <li>DevOps consulting: usage of JIRA, Stash and Bamboo &amp; git. Help organisations adopt CI/CD, and develop custom plugins (Java, OSGi bundles) to integrate with inhouse tools.</li>
           <li>Configuration of Java webapp hosting infrastructure including various supported load balancers, application servers and databases on Unix/Windows.</li>
           <li>Architecture, design and development (Java/Groovy) for custom integrations, migrations and SSO/Authenticator plugins for Atlassian products.</li>
           <li>Pre-sales activies, including requirement gathering, creating estimates and services schedules for statements of work, and technical responses to RFI/RFPs.</li>
         </ul>
       </div>
-      <!-- Short-n-sweet inline script to power the modal boxes. 
-        -- Kept unminified, for the benefit of the curious. -->  
-      <script type='text/javascript'>          
-        var modal = document.getElementById("modal-backdrop");
+    </div>
+    <!-- Short-n-sweet inline script to power the modal boxes. 
+         Kept unminified, for the benefit of the curious. -->  
+    <script type='text/javascript'>          
+      var modal = document.getElementById("modal-backdrop");
 
-        var closeBtns = document.getElementsByClassName("close");
-        for (const closeBtn of closeBtns) {
-          // When the user clicks on a close (x), close the modal
-          closeBtn.onclick = function() {
-            closeTheModal();
-          }
+      var closeBtns = document.getElementsByClassName("close");
+      for (const closeBtn of closeBtns) {
+        // When the user clicks on a close (x), close the modal
+        closeBtn.onclick = function() {
+          closeTheModal();
         }
-        
-        // When the user clicks anywhere outside of the modal, close it
-        window.onclick = function(event) {
-          if (event.target == modal) {
-            closeTheModal();
-          }
+      }
+      
+      // When the user clicks anywhere outside of the modal, close it
+      window.onclick = function(event) {
+        if (event.target == modal) {
+          closeTheModal();
         }
+      }
 
-        function closeTheModal() {
-          modal.style.display = "none";
-          var cvItems = document.getElementsByClassName("cv-item");
-          for (var item of cvItems) {
-            item.style.display = "none"
-          }
+      function closeTheModal() {
+        modal.style.display = "none";
+        var cvItems = document.getElementsByClassName("cv-item");
+        for (var item of cvItems) {
+          item.style.display = "none"
         }
+      }
 
-        // Link the modal popups to the text links
-        let roles = [
-          'servicerocket-consultant',
-          'tfnsw-cloud',
-          'aug-organiser',
-          'digitalfrontiers-founder',
-          'worldfirst-devops'
-        ];
+      // Link the modal popups to the text links
+      let roles = [
+        'servicerocket-consultant',
+        'tfnsw-cloud',
+        'aug-organiser',
+        'digitalfrontiers-founder',
+        'worldfirst-devops'
+      ];
 
-        for (const role of roles) {
-          var cvLinks = document.getElementsByClassName(`cv-link-${role}`);
-          for (const cvLink of cvLinks) {
-            cvLink.onclick = function() {
-              if (modal.style.display === "block") {
-                closeTheModal();
-              }
-              modal.style.display = "block";
-              document.getElementById(`cv-item-${role}`).style.display="block";
+      for (const role of roles) {
+        var cvLinks = document.getElementsByClassName(`cv-link-${role}`);
+        for (const cvLink of cvLinks) {
+          cvLink.onclick = function() {
+            if (modal.style.display === "block") {
+              closeTheModal();
             }
+            modal.style.display = "block";
+            document.getElementById(`cv-item-${role}`).style.display="block";
           }
         }
-      </script>
+      }
+    </script>
   </body>
 </html>
