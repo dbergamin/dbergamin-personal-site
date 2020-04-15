@@ -2,9 +2,9 @@
 layout: post
 author: Daniel Bergamin
 author_url: /about.html
-title:  "My email setup: Design [1/3]"
-series: my-email-setup
-part:   1
+title:  "My email setup: Design"
+series: My Email Setup
+part:   "1"
 date:   2020-04-10 22:38:46 +0100
 categories: tech
 ---
@@ -18,7 +18,7 @@ There'll be a fair bit of fussing over details, so this series will primarily be
 ability who wants to move their mail to a custom domain, whilst retaining a bit of control over the pieces involved.
 
 {: .emphasis-panel}
-> In Part 1, I'll be looking at the problem I was trying to solve, and giving an overview of two solution designs.
+> In this part, I'll be looking at the problem I was trying to solve, and giving an overview of two solution designs.
 >
 > Parts 2 and 3 will go in-depth on how the two solutions have been implemented. I'll be providing detailed walkthroughs
 of how and why I configured each solution, which you can follow along if you so desire.
