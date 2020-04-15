@@ -3,12 +3,14 @@ layout: default
 ---
 
 <div class="home">
-  {%- if page.title -%}
-    <h1 class="page-heading">{{ page.title }}</h1>
-  {%- endif -%}
+  <div class="filter-container">
+    <div id="filter-panel" class="filter-panel">
+      <span>Showing tags:</span>
+      <span id="filter-template" class="filter-tag" style="display: none"></span>
+    </div>
+  </div>
 
   {{ content }}
-
 
   {% if site.paginate %}
     {% assign posts = paginator.posts %}
@@ -24,16 +26,23 @@ layout: default
     <ul class="post-list">
       {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
       {%- for post in posts -%}
-      <li>
+      <li class="post-item">
         <span class="post-meta">{{ post.date | date: date_format }}</span>
-        <h3>
+        <div class="post-name">
           <a class="post-link" href="{{ post.url | relative_url }}">
             {{ post.title | escape }}
+            {%- if post.part -%}
+              <span> | Part {{ post.part }}</span>
+            {%- endif -%}
           </a>
-        </h3>
-        {%- if site.show_excerpts -%}
-          {{ post.excerpt }}
-        {%- endif -%}
+
+        </div>
+        <div class="post-tags">
+          <span class="post-tag">{{ post.categories }}</span>
+          {%- if post.series -%}
+            <span class="post-tag">Series: {{ post.series }}</span>
+          {%- endif -%}
+        </div>
       </li>
       {%- endfor -%}
     </ul>
@@ -63,4 +72,6 @@ layout: default
     </p>
   {%- endif -%}
 
+  <!-- Script to show/hide post elements on a page based on tags -->
+  <script type='text/javascript' src='assets/js/post-filter.js' async defer></script>
 </div>

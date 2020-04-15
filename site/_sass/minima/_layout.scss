@@ -119,8 +119,25 @@
 }
 
 .post-link {
-  display: block;
   @include relative-font-size(1.5);
+}
+
+.post-name {
+  display: flex;
+  font-family: sans-serif;
+}
+
+
+// Tags on the blog page for filtering
+.post-tag {
+  background: #f2f2f5;
+  border: 1px solid #dfe1e6;
+  color: #253858;
+  border-radius: 7px;
+  font-size: 11px;
+  padding: 2px 5px;
+  text-transform: lowercase;
+  margin-right: 5px;
 }
 
 /**
