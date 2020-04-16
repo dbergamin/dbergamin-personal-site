@@ -24,18 +24,30 @@ class Filter {
     this.name = name;
     this.expression = expression;
     this.element = Filter.getNewFilterElement(this.id, this.name, this.expression);
+    this.element.addEventListener('click', this.filterClickEvent);
+    this.active = false;
   }
 
+  // Activate and deactivate do not force re-renders
+  // Allows more precise control to avoid flickering in some loops
   activate() {
+    this.active = true;
     this.element.classList.add('filter-tag-active');
   }
 
   deactivate() {
+    this.active = false;
     this.element.classList.remove('filter-tag-active');
   }
 
-  remove() {
-    this.element.remove();
+  // Toggle forces a re-render
+  toggle() {
+    if (this.active) {
+      this.deactivate();
+    } else {
+      this.activate();
+    }
+    FILTER_INTERFACE.renderPosts();
   }
 
   hide() {
@@ -44,6 +56,12 @@ class Filter {
 
   show() {
     this.element.removeAttribute('style');
+  }
+
+  // Method wired into filters to handle clicks
+  filterClickEvent(event) {
+    const id = event.target.getAttribute('id');
+    FILTER_INTERFACE.getFilter(id).toggle();
   }
   
   static getNewFilterElement(id, name, expression) {
@@ -55,37 +73,104 @@ class Filter {
   }
 }
 
+// TODO: Posts + postTags deserve a class, but I've been lazy and inconsistent for now.
 class FilterInterface {
   constructor() {
     this.filters = [];
-    this.wirePostTagClickEvents();
+    this.postTags = document.getElementsByClassName('post-tag');
+    this.posts = document.getElementsByClassName('post-item');
+    this.resetButton = document.getElementById('filter-reset');
+    this.wireElementEvents();
   }
 
-  addNewFilter(name, expression) {
+  getFilter(id) {
+    return this.filters.find(filter => filter.id == id);
+  }
+
+  getFilterByName(name) {
+    return this.filters.find(filter => filter.name == name);
+  }
+
+  upsertFilter(name, expression) {
+    // Avoid adding duplications - just return the existing one
+    var existingFilter = this.filters.find(filter => filter.name == name);
+    if (existingFilter) {
+      return existingFilter;
+    }
+
+    // Special case where the first user-added filter should deactivate 'all'
+    if (this.filters.length == 1) {
+      this.getFilterByName('all').deactivate();
+    }
+
+    // Add the filter
     var newFilter = new Filter(name, expression);
     this.filters.push(newFilter);
     FILTER_PANEL.insertBefore(newFilter.element, FILTER_TEMPLATE);
     return newFilter;
   }
 
-  wirePostTagClickEvents() {
-    var postTags = document.getElementsByClassName("post-tag");
-    for (const postTag of postTags) {
+  renderPosts() {
+    // it was inconvenient to have to use Array.filter in this statement :D
+    var activeFilters = this.filters.filter(filter => filter.active == true);
+
+    // kind of wishing we had our virtual DOM at this point...
+    // this loop gets a well-deserved rewrite when we add a class to handle post/tag behaviour
+    for (const post of this.posts) {
+      var hidden = true; 
+      var tags = post.getElementsByClassName('post-tag');
+      for (const tag of tags) {
+        var tagName = tag.innerHTML;
+        var matchedFilters = activeFilters.filter(filter => tagName.match(filter.expression));
+        if (matchedFilters && matchedFilters.length > 0) {
+          hidden = false;
+          // Don't highlight every tag if 'all' filter is active
+          if (matchedFilters.length > 1 || matchedFilters[0].name != 'all') {  
+            tag.classList.add('post-tag-active');
+          } else {
+            tag.classList.remove('post-tag-active');
+          }
+        } else {
+          tag.classList.remove('post-tag-active');
+        }
+      }
+
+      if (hidden) {
+        post.setAttribute('style','display:none');
+      } else {
+        post.removeAttribute('style');
+      }
+    }
+  }
+
+  wireElementEvents() {
+    for (const postTag of this.postTags) {
       postTag.addEventListener('click', this.postTagClickEvent);
     }
+    this.resetButton.addEventListener('click', this.resetFiltersClickEvent);
   }
 
   // Method wired into to post tags to handle clicks
   postTagClickEvent(event) {
-    console.log(event.target);
-    console.log(event.target.innerHTML);
-    const filter = FILTER_INTERFACE.addNewFilter(event.target.innerHTML, event.target.innerHTML);
+    const filter = FILTER_INTERFACE.upsertFilter(event.target.innerHTML, event.target.innerHTML);
     filter.show();
-    filter.activate();
+    filter.toggle();
+  }
+
+  resetFiltersClickEvent() {
+    FILTER_INTERFACE.filters.forEach(function(filter) {
+      if (filter.name == 'all') {
+        filter.activate();
+      } else {
+        filter.deactivate();
+        filter.hide();
+      }
+    });
+    FILTER_INTERFACE.renderPosts();
   }
 }
 
 var FILTER_INTERFACE = new FilterInterface();
-var ALL_FILTER = FILTER_INTERFACE.addNewFilter('all', '.*');
+var ALL_FILTER = FILTER_INTERFACE.upsertFilter('all', '.*');
 ALL_FILTER.show();
-ALL_FILTER.activate();
+ALL_FILTER.toggle();

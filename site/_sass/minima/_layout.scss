@@ -140,6 +140,42 @@
   margin-right: 5px;
 }
 
+.post-tag-active {
+  @extend .post-tag;
+  background: cornflowerblue;
+}
+
+
+// Styles for the filtering system for my posts on the blog landing page
+#filter-container {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+  background: #eef;
+  margin-bottom: $spacing-unit;
+}
+
+#filter-panel {
+  margin: $spacing-unit / 3;
+  margin-bottom: 0px;
+}
+
+#filter-reset {
+  font-size: smaller;
+  text-decoration: underline;
+}
+
+.filter-tag {
+  @extend .post-tag;
+  font-size: medium;
+}
+
+.filter-tag-active {
+  @extend .filter-tag;
+  background: cornflowerblue;
+}
+
 /**
  * Posts
  */
