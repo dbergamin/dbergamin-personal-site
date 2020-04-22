@@ -3,7 +3,7 @@ var FILTER_TEMPLATE = document.querySelector('#filter-template');
 
 class DanUtils {
   /**
-   * Thanks 'https://stackoverflow.com/users/633183/thank-you' for this snippet
+   * Thanks https://stackoverflow.com/users/633183/thank-you for this snippet
    * https://stackoverflow.com/a/27747377
    */
   static dec2hex(dec) {
@@ -16,10 +16,27 @@ class DanUtils {
     window.crypto.getRandomValues(arr);
     return Array.from(arr, DanUtils.dec2hex).join('');
   }
+
+  /**
+   * Thanks https://stackoverflow.com/users/21677/james for this snippet
+   * https://stackoverflow.com/a/5158301
+   */
+  static getQueryStringParameterByName(name) {
+    var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+    return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+  }
 }
 
 class Filter {
   constructor(name, expression) {
+    if (!name) {
+      throw "Avoid creating empty filters please";
+    }
+
+    if (name.indexOf(",") > -1) {
+      throw "Don't create labels/filters with commas, it breaks multiple tags in post definitions and the query string :(";
+    }
+
     this.id = "filter-" + DanUtils.generateId(8); 
     this.name = name;
     this.expression = expression;
@@ -99,8 +116,13 @@ class FilterInterface {
     }
 
     // Special case where the first user-added filter should deactivate 'all'
-    if (this.filters.length == 1) {
+    if (this.filters.length == 1 && this.getFilterByName('all')) {
       this.getFilterByName('all').deactivate();
+    }
+
+    // Default the expression to the lowercased name
+    if (!expression) {
+      expression = name.toLowerCase();
     }
 
     // Add the filter
@@ -120,7 +142,7 @@ class FilterInterface {
       var hidden = true; 
       var tags = post.getElementsByClassName('post-tag');
       for (const tag of tags) {
-        var tagName = tag.innerHTML;
+        var tagName = tag.innerHTML.toLowerCase();
         var matchedFilters = activeFilters.filter(filter => tagName.match(filter.expression));
         if (matchedFilters && matchedFilters.length > 0) {
           hidden = false;
@@ -152,7 +174,7 @@ class FilterInterface {
 
   // Method wired into to post tags to handle clicks
   postTagClickEvent(event) {
-    const filter = FILTER_INTERFACE.upsertFilter(event.target.innerHTML, event.target.innerHTML);
+    const filter = FILTER_INTERFACE.upsertFilter(event.target.innerHTML);
     filter.show();
     filter.toggle();
   }
@@ -170,7 +192,32 @@ class FilterInterface {
   }
 }
 
+class PageState {
+  constructor() {
+    this.filterNames = DanUtils.getQueryStringParameterByName('filters').split(',');
+    this.initState();
+  }
+
+  initState() {
+    // Add the 'all' filter
+    var ALL_FILTER = FILTER_INTERFACE.upsertFilter('all', '.*');
+    ALL_FILTER.show();
+    ALL_FILTER.toggle();
+
+    // Activate any other filters that have been requested from querystring
+    // This will apply the usual logic to auto-deactivate 'all' when first activiating a custom filter
+    if (this.filterNames) {
+      for (const filterName of this.filterNames) {
+        var newFilter = FILTER_INTERFACE.upsertFilter(filterName);
+        newFilter.show();
+        newFilter.toggle();
+      }
+    }
+  }
+}
+
+/* Set up the filters */
 var FILTER_INTERFACE = new FilterInterface();
-var ALL_FILTER = FILTER_INTERFACE.upsertFilter('all', '.*');
-ALL_FILTER.show();
-ALL_FILTER.toggle();
+
+/* Initialise the page string */
+var PAGE_STATE = new PageState();
