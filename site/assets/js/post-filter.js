@@ -194,7 +194,10 @@ class FilterInterface {
 
 class PageState {
   constructor() {
-    this.filterNames = DanUtils.getQueryStringParameterByName('filters').split(',');
+    var qs_filterNames = DanUtils.getQueryStringParameterByName('filters');
+    if (qs_filterNames) {
+      this.filterNames = qs_filterNames.split(',');
+    }
     this.initState();
   }
 

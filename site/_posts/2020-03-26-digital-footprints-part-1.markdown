@@ -2,7 +2,7 @@
 layout: post
 author: Daniel Bergamin
 author_url: /about.html
-title:  "Digital footprints - Public presence"
+title:  "Digital footprints: Public presence"
 series: Digital Footprints
 part:   "1"
 date:   2020-03-26 13:00:33 +0000
@@ -85,7 +85,7 @@ I had a few motivations to get my email away from being totally dependant on Gma
 * Not participating in the current mail oligopoly. While setting up new outbound mailing systems for an employer, I found the anti-spam measures employed by the big players to be extremely opaque and devoid of any regulatory accountability. Even with properly configured SPF/DKIM and using clean IP's (not on any public blacklist I could find), messages were being classified as spam, and the limited anti-spam decision making info in the mail headers did not explain why. 
 * While I love the spam filtering nous of these free services as a user, being stuck on the other side in this situation was an eye-opener to dangers of email becoming extremely centralised. You shouldn't need to have a Google or Microsoft account to be able to mail their users reliably, and the more we centralise on these providers, the closer we get to this reality.
 
-What to do about it involved a bit of consideration. Popular alternatives [Fastmail][fastmail] and [Protonmail][prontonmail] looked appealing, but I ended up going with something a bit custom using [Amazon SES][amazon-ses], which won for me on price, flexibility, and ability to get my hands a little bit dirty whilst abstracting away the more mundane tasks involved with running a mail server. If you're still curious and might want to do something similar, I've put together a [more detailed technical walkthrough here]({% post_url 2020-04-10-my-email-setup-part-1 %}).
+What to do about it involved a bit of consideration. Popular alternatives [Fastmail][fastmail] and [Protonmail][protonmail] looked appealing, but I ended up going with something a bit custom using [Amazon SES][amazon-ses], which won for me on price, flexibility, and ability to get my hands a little bit dirty whilst abstracting away the more mundane tasks involved with running a mail server. If you're still curious and might want to do something similar, I've put together a [more detailed technical walkthrough here]({% post_url 2020-04-10-my-email-setup-part-1 %}).
 
 With fresh custom emails (primary: daniel@bergam.in, backup daniel@danielbergamin.net) backed by SES, I've gained the following:
 * Separation between domain and the email operator. If I ever want to move away from AWS SES, I can move to another email provider without losing the email address, saving the headache of updating a lot of sites and losing a trusted identity.
@@ -93,11 +93,11 @@ With fresh custom emails (primary: daniel@bergam.in, backup daniel@danielbergami
 * Doing my bit to keep mail decentralised.
 
 {: .emphasis-panel }
-> Side note: as part of my archival efforts (more on that in Part 2), I purchased an integrated cloud storage product from Google, 'Google One'. Annual fees start at AUD$25, and as a paying customer, you can actually [get human support from Google][google-human-support]. Simpler than trying to roll your own and migrate, and well worth a look if you heavily depend on their services.
+> Side note: as part of my archival efforts, I purchased an integrated cloud storage product from Google, 'Google One'. Annual fees start at AUD$25, and as a paying customer, you can actually [get human support from Google][google-human-support]. Simpler than trying to roll your own and migrate, and well worth a look if you heavily depend on their services.
 
 ----
 
-That's it for part one! Part two will be focused on how I use the internet to manage and organise my private content, like photos, messages and passwords. 
+That's it for part one! [Later parts][later-parts] will look at building a deeper understanding of our personal use cases, and then a deeper dive into how I leverage the internet to manage and organise private content like photos, messages and passwords. 
 
 [about-this-site]:            {% post_url 2020-02-06-about-this-site %}
 [cv]:                         {% link cv.markdown %}
@@ -112,4 +112,5 @@ That's it for part one! Part two will be focused on how I use the internet to ma
 [wordpress]:                  https://wordpress.com/
 [amazon-ses]:                 https://aws.amazon.com/ses/
 [fastmail]:                   https://www.fastmail.com/pricing/
-[prontonmail]:                https://protonmail.com/pricing
+[protonmail]:                 https://protonmail.com/pricing
+[later-parts]:                {% link blog.markdown %}?filters=series%3A%20digital%20footprints
