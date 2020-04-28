@@ -198,7 +198,7 @@ blockquote.trailing-image > :last-child {
 }
 
 blockquote.light-emphasis-panel {
-  @extend blockquote.emphasis-panel;
+  @extend blockquote, .emphasis-panel;
   background-color: #eef;
 }
 

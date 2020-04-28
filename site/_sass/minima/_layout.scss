@@ -231,12 +231,17 @@
   }
 
   hr:after {
-      content: "§";
-      display: inline-block;
-      position: relative;
-      top: -0.7em;
-      font-size: 1.5em;
-      padding: 0 0.25em;
-      background: white;
+    content: "§";
+    display: inline-block;
+    position: relative;
+    top: -0.7em;
+    font-size: 1.5em;
+    padding: 0 0.25em;
+    background: white;
   }
+}
+
+.text-small {
+  font-size: $small-font-size;
+  margin-bottom: $spacing-unit / 3;
 }
