@@ -80,11 +80,11 @@ That's it for now! The next part of [this series][digital-footprints] will be a 
 {:.text-small}
 [_The rule is simple: be careful what you measure_][be-careful-what-you-measure]: Simon Caulkin, for The Observer
 {:.text-small}
-[How Everyday Social Media Users Become Real-World Extremists][facebook-extremism]: Max Fisher and Amanda Taub, for The New York Times
+[_How Everyday Social Media Users Become Real-World Extremists_][facebook-extremism]: Max Fisher and Amanda Taub, for The New York Times
 {:.text-small}
-[Testifying at the Senate about A.I.‑Selected Content on the Internet][wolfram-blog]: Stephen Wolfram
+[_Testifying at the Senate about A.I.‑Selected Content on the Internet_][wolfram-blog]: Stephen Wolfram
 {:.text-small}
-[Five whys][five-whys]: Wikipedia
+[_Five whys_][five-whys]: Wikipedia
 {:.text-small}
 
 [be-careful-what-you-measure]:  https://www.theguardian.com/business/2008/feb/10/businesscomment1
