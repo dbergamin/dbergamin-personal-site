@@ -14,7 +14,8 @@ For me, the process of building the site was a key part of the journey. But for 
 A self-hosted Wordpress instance on the AWS free tier ended up being the most attractive option. While doing the setup, I thought I'd document the process and share it here in the hope of making it easier for others who want to do the same. Blogging is a very isolation-friendly exercise, and I'd recommend it to anyone!
 
 A quick note in advance to address some glaring omissions:
-1. I've opted for a local database over RDS due to cost. The automated maintenance offered by RDS would make it a sensible choice if cost were no object.
+1. ~~I've opted for a local database over RDS due to cost. The automated maintenance offered by RDS would make it a sensible choice if cost were no object.~~
+  * Update: Thanks to Ravi Soni for pointing out that RDS has a separate Free Tier allowance to EC2, so you get a year free on RDS as well! I am going to update the setup and this post to use RDS in due course.
 1. Despite likely being faster to set up initially, I've avoided Docker here, as it adds complexity to ongoing maintenance and troubleshooting. With no major need for isolation and no local development or pipeline, I don't think it pays for itself here. If you've had a good experience using Docker for this use case, please do write about it and reach out, I'm not averse to switching! 
 
 ----
@@ -104,9 +105,10 @@ $ sudo su -
 
 ### Prepare the Database
 
-1. First, start MariaDB:
+1. First, start MariaDB and enable it for future reboots:
 ~~~
 # systemctl start mariadb.service
+# systemctl enable mariadb.service
 ~~~
 1. Now, create the database. Do choose your own password! 
     ~~~
@@ -133,9 +135,10 @@ $ sudo su -
         * Generate your unique auth keys/salts using the link in the sample documentation.
         * Please DO read the sample config documentation, and don't skip this!
 
-1. Finally, start Apache:
+1. Finally, start and enable Apache:
 ~~~
 # systemctl start httpd
+# systemctl enable httpd
 ~~~
 
 1. Drop out of root and back to ec2-user:
@@ -229,6 +232,9 @@ $ sudo su -
 ~~~
 # vi /etc/httpd/conf.d/%mydomain.com%.conf
 '' Add this config block
+    ServerTokens Prod
+    ServerSignature Off
+
     <IfModule mod_ssl.c>
       <VirtualHost *:443>
           ServerAdmin %webmaster@mydomain.com%
@@ -248,8 +254,14 @@ $ sudo su -
           SSLCertificateKeyFile /etc/httpd/ssl/private.pem
       </VirtualHost>
     </IfModule>
+
+    <IfModule mod_headers.c>  
+      Header unset X-Powered-By
+      Header always unset X-Powered-By
+    </IfModule>
 '' Save and exit
 ~~~
+*Thanks [@George Gkirtsou][george-site] for feedback on this configuration.
 
 1. Now, back to our EC2 Security Group config on Amazon. We want to configure our origin servers to drop traffic from anyone but Cloudflare and ourselves to reduce the attack surface. 
 * If you haven't got your AWS CLI set up (or don't know what this means), it's probably easiest to add the security group (SG) rules manually. Run through the [Cloudflare IPs list][cloudflare-subnets] add them to your SG rules for port 443, and then we're done!
@@ -363,7 +375,7 @@ I chose to use the Wordpress backup plugin [UpdraftPlus][updraft-plus]. Install 
   * After authenticating with your remote, manually take a test backup **and restore it** to verify that it works.
 
 ### Keeping your instance patched
-Patching is a bit of a chore and easy to forget. Let's automate it using the AWS Systems Manager.
+Patching is a bit of a chore and easy to forget. Let's automate it using the AWS Systems Manager. Please note that these instructions are best suited for an AWS account that only runs this Wordpress instance.
 
 1. Open up the AWS Console and go to the Systems Manager product. Click through the wizard, creating the default IAM role and targeting all eligible instances to get started. 
 1. SSH into your Wordpress instance and run `sudo systemctl restart amazon-ssm-agent.service` to help it get detected faster.
@@ -392,6 +404,7 @@ I am by no means an SEO expert, and I believe obsessing over views and search ra
 
 To those that made it this far, thanks for following along and I hope you've enjoyed the process! You can contact me via details on the [about page][about-me] with have any constructive feedback, or even just to share some enthusiasm.
 
+[ravi-linkedin]:          https://
 [shelleys-blog]:          https://shelleyguo.com/
 [putty]:                  https://www.chiark.greenend.org.uk/~sgtatham/putty/
 [ps-ssh]:                 https://adamtheautomator.com/ssh-with-powershell/
@@ -408,6 +421,7 @@ To those that made it this far, thanks for following along and I hope you've enj
 [add-cf-ranges-to-sg]:    https://gist.github.com/dbergamin/f0c9416b2f89fda6693514f4b741fad6
 [ssh-sftp-updater]:       https://en-gb.wordpress.org/plugins/ssh-sftp-updater-support
 [updraft-plus]:           https://wordpress.org/plugins/updraftplus/
+[george-site]:            https://ggirtsou.com/
 [seo-framework]:          https://wordpress.org/plugins/autodescription/
 [google-search-console]:  https://search.google.com/search-console/welcome
 [about-me]:               /about.html
