@@ -2,7 +2,7 @@
 layout: post
 author: Daniel Bergamin
 author_url: /about.html
-title:  "Walkthrough: Wordpress from scratch, using AWS and Cloudflare"
+title:  "Wordpress from scratch, using AWS and Cloudflare"
 date:   2020-05-19 13:25:55 +1000
 categories: tech
 ---
@@ -16,12 +16,12 @@ A self-hosted Wordpress instance on the AWS free tier ended up being the most at
 A quick note in advance to address some glaring omissions:
 1. ~~I've opted for a local database over RDS due to cost. The automated maintenance offered by RDS would make it a sensible choice if cost were no object.~~
   * Update: Thanks to Ravi Soni for pointing out that RDS has a separate Free Tier allowance to EC2, so you get a year free on RDS as well! I am going to update the setup and this post to use RDS in due course.
-1. Despite likely being faster to set up initially, I've avoided Docker here, as it adds complexity to ongoing maintenance and troubleshooting. With no major need for isolation and no local development or pipeline, I don't think it pays for itself here. If you've had a good experience using Docker for this use case, please do write about it and reach out, I'm not averse to switching! 
+1. Despite likely being faster to set up initially, I've avoided Docker here, as it adds complexity to ongoing maintenance and troubleshooting. With no major need for isolation and no local development or pipeline, I don't think it pays for itself here. If you've had a good experience using Docker for this use case, please do write about it and reach out, I'm not averse to switching!
 
 ----
 
 {: .light-emphasis-panel}
-> This walkthrough goes through the full setup process in moderate detail. It should take 2 - 3 hours to complete in full.
+> This tutorial / walkthrough goes through the full setup process in moderate detail. It should take 2 - 3 hours to complete in full.
 >
 > **What you'll need to follow along:**
 > * Moderate technical ability and enthusiasm. I'm not going to go to the level of screenshots, so it'll be easier if you have basic familiarity with AWS and general Linux administration.
