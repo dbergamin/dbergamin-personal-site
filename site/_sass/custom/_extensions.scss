@@ -35,3 +35,13 @@
   background: lightgoldenrodyellow;
   padding: 3px;
 }
+
+.header-photo > img {
+  filter: drop-shadow(2px 4px 6px gray);
+  border-radius: 50%;
+}
+
+.header-caption {
+  text-align: center;
+  font-style: italic;
+}

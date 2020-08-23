@@ -1,0 +1,73 @@
+---
+layout: post
+author: Daniel Bergamin
+author_url: /about.html
+title:  "Scones"
+date:   2020-07-26 14:13:12 +0100
+categories: cooking
+---
+
+![scones](/assets/posts/scones/scones.jpeg)
+{: .header-photo}
+
+What else do you do in lockdown?
+{: .header-caption}
+
+After setting aside some time each week to fatten up my household with yet another batch of scones, we have a verdict. 8 recipe variations, three different flours, and many bakes later, I present batch #6. Made and remade a few times with success.
+
+----
+**Dry**
+- 280g (~2 cups) sifted plain flour. I found [Doves Farm][doves-farm] worked best.
+- 2T caster sugar
+- 1/2t table salt
+- 1t baking soda
+- 1.5t baking powder
+
+**Wet**
+- 80g cold butter
+- 2/3 cup semi-skimmed milk
+- Half a lemon
+- 1 egg
+
+**Tools**
+- Medium or large mixing bowl
+- Butter knife
+- Fork
+- Rolling pin
+- Pastry brush
+- A scone cutter or appropriately sized glass. I like a 6-7cm diameter.
+
+----
+
+#### Process
+1. Preparation:
+  - Preheat oven to 200C fan-forced.
+  - Put your butter in the freezer so it stays nice and cold throughout the process.
+  - Squeeze your half-lemon into the milk and stir gently. Surprisingly, this 'substitute buttermilk' tended to produce better results than using actual buttermilk.
+>
+2. In a mixing bowl, combine all of the dry ingredients.
+
+3. Take the butter out of the freezer and slice into small pieces (~1cm cubes). Add to the dry ingredients and rub together with your fingertips till the mixure looks like it a mix of flour and chunky breadcrumbs.
+
+4. Beat the egg with the soured milk with a fork. Add 80% of this mixture to the mixing bowl, reserving 20% for brushing the tops before baking.
+
+5. Use your knife to bring the mixing bowl together with cutting and folding movements. Do not overwork or knead – this would develop the gluten, yielding tough, bready scones.
+
+6. The mixture should be sticky but hold together well enough. Turn out onto a floured work surface and bring it together. I like to bring all the edges into the centre like I'm creating a vaguely rectangular ball, and then flip and roll out gently with a rolling pin till about 2.5cm thick.
+
+7. Flour the rim of the glass or scone cutter and cut scones by pushing the glass or cutter down and giving a gentle quarter-twist. Bring the leftover dough together and repeat.
+
+8. Arrange the scones on a lightly floured baking sheet. Brus1h the tops – _only_ the tops, not the sides – with the reserved egg/milk mixture. 
+
+9. Bake on an upper shelf until they look lightly browned and done. Usually 12 - 15 mins.
+
+10. Enjoy! I usually serve these lightly toasted with a dollop of clotted or dense whipped cream and strawberry jam, but we've found homemade applesauce to be a surprisingly good topping if you're not a fan of cream.
+
+#### Notes
+Every flour and every palate is different. Try to get a feel for the stickiness of the dough at step 6, and have a play with the quantity of milk to work out what you like! 
+
+----
+
+P.S. scone rhymes with gone, not cone!
+
+[doves-farm]: https://www.dovesfarm.co.uk/products/organic-plain-white-flour-1kg

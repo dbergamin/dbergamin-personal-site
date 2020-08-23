@@ -9,7 +9,7 @@ date:   2020-03-30 16:22:55 +0100
 categories: personal
 ---
 
-In this series of posts, I want to record and share things that recently 'sparked joy' in my life on a day-to-day basis. No sponsors or affiliate links, just things I want to share along with a few specific things I liked about them.
+In this [series of posts][post-series], I record and share things that recently 'sparked joy' in my life on a day-to-day basis. No sponsors or affiliate links, just things I want to share along with a few specific things I liked about them.
 
 {: .emphasis-panel}
 > Tip: use mousewheel-click or ctrl-click if you'd like to open these links in a new tab.
